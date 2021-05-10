@@ -69,7 +69,7 @@ export default {
           }
           vnode.context.handleResize(target, range)
         }
-        document.onmouseup = (e) => {
+        document.onmouseup = () => {
           document.onmousemove = null
           document.onmouseup = null
           vnode.context.handleTrackResize()

@@ -228,7 +228,7 @@ import PictureDrr from './drrContainers/PictureDrr'
 import TextDrr from './drrContainers/TextDrr'
 import VideoControls from './VideoControls'
 // import Various from './global/various'
-import { formatDuration } from '@/utlis/smartCreation'
+import { formatDuration } from '@/components/onlineClip/global/functions'
 import { mapState } from 'vuex'
 export default {
   components: {
@@ -285,11 +285,13 @@ export default {
       trackCurrentTimeString: '00:00:00',
       trackDuration: 0,
       controlsIcons: {
-        play: require('../../assets/onlineClip/play.png'),
-        pause: require('../../assets/onlineClip/pause.png')
+        play: require('../../assets/play.png'),
+        pause: require('../../assets/pause.png')
       },
       coverList: [],
-      mediaImageUploadUrl: 'api/uploadHomeImgV2.html',
+      mediaImageUploadUrl: '',
+      // 关闭接口
+      // mediaImageUploadUrl: 'api/uploadHomeImgV2.html',
       videoInfo: {
         editId: '',
         videoTitle: '',
@@ -647,7 +649,7 @@ export default {
         this.$refs.videoInfo.validateField('picH')
       }
     },
-    handleUploadBefore (index, value) {
+    handleUploadBefore (index) {
       // 本地上传封面前 根据index判断是横图/竖图并设置对应状态
       if (index) {
         this.loadingPicV = true
@@ -655,29 +657,31 @@ export default {
         this.loadingPicH = true
       }
     },
-    handleUploadCanvas (value, target, index) { // target: 0 picH, 1 picV, 2 added, 3 selected
+    handleUploadCanvas () {},
+    // 关闭接口
+    // handleUploadCanvas (value, target, index) { // target: 0 picH, 1 picV, 2 added, 3 selected
       // 处理上传至CDN的图片
-      const imageFile = this.transferBase64ToFile(value)
-      let form = new FormData()
-      form.append('file', imageFile)
-      return this.$service.uploadCover(form).then(data => {
-        switch (target) {
-          case 0:
-            this.videoInfo.picH = data.url
-            break
-          case 1:
-            this.videoInfo.picV = data.url
-            break
-          case 2:
-            this.realAddedList[index].cover = data.url
-            break
-          case 3:
-            this.realSelectedList[index].cover = data.url
-            break
-        }
-        return true
-      })
-    },
+      // const imageFile = this.transferBase64ToFile(value)
+      // let form = new FormData()
+      // form.append('file', imageFile)
+      // return this.$service.uploadCover(form).then(data => {
+      //   switch (target) {
+      //     case 0:
+      //       this.videoInfo.picH = data.url
+      //       break
+      //     case 1:
+      //       this.videoInfo.picV = data.url
+      //       break
+      //     case 2:
+      //       this.realAddedList[index].cover = data.url
+      //       break
+      //     case 3:
+      //       this.realSelectedList[index].cover = data.url
+      //       break
+      //   }
+      //   return true
+      // })
+    // },
     handleSubmitValid () {
       // 保存/提交剪辑前的检查
       if (this.loadingSave) {
@@ -701,23 +705,24 @@ export default {
       promiseContainer.push(this.formatAllMaterial())
       // 所有数据转换完成后 save
       Promise.all(promiseContainer).then(() => {
-        const params = this.getSaveParams()
-        this.$service.saveClippedVideo(params).then(data => {
-          if (this.saveOrSubmit) {
-            this.$message({
-              type: 'success',
-              message: '提交剪辑成功！请在【短视频生产】-【剪辑队列】中确认'
-            })
-          } else {
-            this.$message({
-              type: 'success',
-              message: '保存作品成功！请在【短视频生产】-【我保存的作品】中确认'
-            })
-          }
-          this.isLoading = false
-          // 保存成功 关闭剪辑页面
-          this.$emit('all-close')
-        })
+        // 关闭接口
+        // const params = this.getSaveParams()
+        // this.$service.saveClippedVideo(params).then(() => {
+        //   if (this.saveOrSubmit) {
+        //     this.$message({
+        //       type: 'success',
+        //       message: '提交剪辑成功！请在【短视频生产】-【剪辑队列】中确认'
+        //     })
+        //   } else {
+        //     this.$message({
+        //       type: 'success',
+        //       message: '保存作品成功！请在【短视频生产】-【我保存的作品】中确认'
+        //     })
+        //   }
+        //   this.isLoading = false
+        //   // 保存成功 关闭剪辑页面
+        //   this.$emit('all-close')
+        // })
       }).catch(() => {
         this.isLoading = false
         this.$message.error('网络异常，请稍后再试')
@@ -921,41 +926,43 @@ export default {
       // 获得数组反转后原index对应的现index
       return length - 1 + index + index * (-2)
     },
-    getAdviceTag () {
-      // 智能标签获取
-      const target = this.realSelectedList.find(item => {
-        // 获取非本地上传素材的coocaaVId
-        return item.coocaaVId * 1 !== -1
-      })
-      this.$service.getAdviceTag({ coocaaVId: target.coocaaVId }).then(data => {
-        if (!data.data.length) {
-          this.$message({
-            type: 'warning',
-            message: '素材暂无智能标签'
-          })
-        } else {
-          this.$message({
-            type: 'success',
-            message: '智能标签获取成功，已进行重复剔除'
-          })
-          // 剔除重复标签
-          const list = data.data.split(',')
-          for (let i = 0; i < list.length; i++) {
-            const tag = this.videoInfo.tag.find(item => {
-              return list[i] === item
-            })
-            if (!tag) {
-              this.videoInfo.tag.push(list[i])
-            }
-          }
-        }
-      }).catch(() => {
-        this.$message({
-          type: 'warning',
-          message: '素材暂无智能标签'
-        })
-      })
-    },
+    getAdviceTag () {},
+    // 关闭接口
+    // getAdviceTag () {
+    //   // 智能标签获取
+    //   const target = this.realSelectedList.find(item => {
+    //     // 获取非本地上传素材的coocaaVId
+    //     return item.coocaaVId * 1 !== -1
+    //   })
+    //   this.$service.getAdviceTag({ coocaaVId: target.coocaaVId }).then(data => {
+    //     if (!data.data.length) {
+    //       this.$message({
+    //         type: 'warning',
+    //         message: '素材暂无智能标签'
+    //       })
+    //     } else {
+    //       this.$message({
+    //         type: 'success',
+    //         message: '智能标签获取成功，已进行重复剔除'
+    //       })
+    //       // 剔除重复标签
+    //       const list = data.data.split(',')
+    //       for (let i = 0; i < list.length; i++) {
+    //         const tag = this.videoInfo.tag.find(item => {
+    //           return list[i] === item
+    //         })
+    //         if (!tag) {
+    //           this.videoInfo.tag.push(list[i])
+    //         }
+    //       }
+    //     }
+    //   }).catch(() => {
+    //     this.$message({
+    //       type: 'warning',
+    //       message: '素材暂无智能标签'
+    //     })
+    //   })
+    // },
     initForm () {
       // 编辑入口进入 同步先前数据
       this.videoInfo = { ...this.formInfo }
@@ -980,13 +987,14 @@ export default {
       this.heightScale = 360 / this.videoFrame.height
     },
     fetchData () {
+      // 关闭接口
       // 获取业务分类与内容分类
-      this.$service.queryMaterialResource().then(data => {
-        this.businessTypeList = data.businessType
-        this.categoryTypeList = data.categoryType
-        this.categoryTypeList.push(this.educationType)
-        this.realCategoryTypeList = this.categoryTypeList
-      })
+      // this.$service.queryMaterialResource().then(data => {
+      //   this.businessTypeList = data.businessType
+      //   this.categoryTypeList = data.categoryType
+      //   this.categoryTypeList.push(this.educationType)
+      //   this.realCategoryTypeList = this.categoryTypeList
+      // })
     },
     stopCanvasVideo () {
       clearInterval(this.canvasTimer)

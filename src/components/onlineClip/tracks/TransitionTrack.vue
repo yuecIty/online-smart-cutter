@@ -183,7 +183,7 @@ export default {
     })
   },
   watch: {
-    materialTrackList: function (val) {
+    materialTrackList: function () {
       if (this.isInitTransition) {
         this.isInitTransition = false
         return true
@@ -322,7 +322,6 @@ export default {
   mounted () {
     window.addEventListener('mousedown', this.clickMonitor)
     document.querySelector('.clip-resource').addEventListener('scroll', this.scrollMonitor)
-    document.querySelector('.el-dialog__body').addEventListener('scroll', this.scrollMonitor)
   },
   beforeDestroy () {
     window.removeEventListener('mousedown', this.clickMonitor)
@@ -382,4 +381,6 @@ export default {
   &:hover
     color #409eff
     cursor pointer
+i
+  color #606266
 </style>

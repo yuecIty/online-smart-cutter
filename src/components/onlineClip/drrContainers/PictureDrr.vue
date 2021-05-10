@@ -192,7 +192,7 @@ export default {
     handleResizeStop (left, top, width, height) {
       this.$store.commit('drrResizeStop', { left: left, top: top, width: width, height: height })
     },
-    handleResizeClick (index) {
+    handleResizeClick () {
       // const target = this.$refs.pictureTrack.$refs['picture' + index][0]
       // this.onlineTab = 'pictureTab'
       // this.$store.dispatch('setTrackBlockSelect', { e: target, index: index, list: 'pictureTrackList', vm: this })

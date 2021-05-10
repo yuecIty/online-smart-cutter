@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import { formatDuration } from '@/utlis/smartCreation'
+import { formatDuration } from '@/components/onlineClip/global/functions'
 import { mapState } from 'vuex'
 export default {
   props: {
@@ -33,7 +33,7 @@ export default {
           const moveX = e.clientX - distanceX
           vnode.context.changePointer(moveX)
         }
-        document.onmouseup = (e) => {
+        document.onmouseup = () => {
           document.onmousemove = null
           document.onmouseup = null
         }
@@ -57,7 +57,7 @@ export default {
   },
   watch: {
     timeAxisDuration: {
-      handler: function (val) {
+      handler: function () {
         this.getWidth()
       },
       deep: true

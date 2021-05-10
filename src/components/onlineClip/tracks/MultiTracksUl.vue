@@ -97,4 +97,6 @@ export default {
     &:hover
       color #409eff
       cursor pointer
+li::marker
+  font-size 0px
 </style>

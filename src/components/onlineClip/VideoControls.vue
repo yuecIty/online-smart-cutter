@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { formatDuration } from '@/utlis/smartCreation'
+import { formatDuration } from '@/components/onlineClip/global/functions'
 export default {
   props: {
     videoPlay: {
@@ -51,8 +51,8 @@ export default {
   data () {
     return {
       controlsIcons: {
-        play: require('../../assets/onlineClip/play.png'),
-        pause: require('../../assets/onlineClip/pause.png')
+        play: require('../../assets/play.png'),
+        pause: require('../../assets/pause.png')
       },
       sliderData: 0,
       trackCurrentTimeString: '00:00:00',
