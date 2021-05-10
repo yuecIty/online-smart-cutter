@@ -9,7 +9,13 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "element-ui": "^2.15.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue": "^2.6.11",
+    "vue-drr": "^1.0.9",
+    "vuedraggable": "^2.24.3",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
