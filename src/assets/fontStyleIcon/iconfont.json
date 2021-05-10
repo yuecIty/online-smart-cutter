@@ -1,0 +1,79 @@
+{
+  "id": "2447436",
+  "name": "fontStyleIcon",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "19204011",
+      "name": "标签",
+      "font_class": "biaoqian3",
+      "unicode": "e6fa",
+      "unicode_decimal": 59130
+    },
+    {
+      "icon_id": "5202917",
+      "name": "居中对齐",
+      "font_class": "juzhongduiqi",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "5202918",
+      "name": "居右对齐",
+      "font_class": "juyouduiqi",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "5202919",
+      "name": "加粗",
+      "font_class": "jiacu",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "5202921",
+      "name": "居左对齐",
+      "font_class": "juzuoduiqi",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "5202922",
+      "name": "下划线",
+      "font_class": "xiahuaxian",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "5202923",
+      "name": "斜体",
+      "font_class": "xieti",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "9642080",
+      "name": "阴影",
+      "font_class": "yinying",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "9642081",
+      "name": "描边",
+      "font_class": "miaobian",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "11179879",
+      "name": "文字边框",
+      "font_class": "wenzibiankuang",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    }
+  ]
+}

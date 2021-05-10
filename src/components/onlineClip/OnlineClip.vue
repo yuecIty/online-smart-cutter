@@ -1,27 +1,6 @@
 <template>
   <div id="onlineClip" class="online-clip">
-    <el-dialog
-      v-loading="clipLoading"
-      width="100%"
-      class="online-clip-dialog"
-      :modal="false"
-      :visible.sync="isShowOnlineClip"
-      :before-close="handleOnclipClose"
-    >
-      <div slot="title" class="dialog-header">
-        <span>在线剪辑</span>
-        <!-- 若为编辑状态 则显示所编辑的文件名 -->
-        <span v-if="!!editId">{{ '：' + videoInfo.videoTitle }}</span>
-        <!-- 注意事项 -->
-        <el-tooltip placement="bottom">
-          <div slot="content">
-            * 视频的实际长度以视频轨道长度为准
-            <!-- <br /> -->
-            <!-- * 视频轨道的添加、删除、移动、剪辑等操作，均会重置所有转场 -->
-          </div>
-          <i class="el-icon-question search-tips"></i>
-        </el-tooltip>
-      </div>
+    <div >
       <el-row :gutter="5" class="main-area">
         <el-col :span="15" class="material-cols" ref="tabsCol">
           <!-- tabs素材区域 -->
@@ -265,7 +244,7 @@
           <el-row :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"></el-row>
         </el-col>
       </el-row>
-    </el-dialog>
+    </div>
     <!-- 素材推荐弹窗 -->
     <el-dialog
       v-if="isShowMaterialAdd"
@@ -276,9 +255,11 @@
       :append-to-body="true"
       :modal-append-to-body="true"
     >
-      <MaterialRecommendation
+      <TempMessage></TempMessage>
+      <!-- 关闭接口 -->
+      <!-- <MaterialRecommendation
         :is-online-clip="true"
-      ></MaterialRecommendation>
+      ></MaterialRecommendation> -->
     </el-dialog>
     <!-- 保存/提交剪辑弹窗 -->
     <SubmitClip
@@ -294,7 +275,6 @@
   </div>
 </template>
 <script>
-import MaterialRecommendation from '@/views/smartCreation/materialRecommendation'
 import TimeAxis from './TimeAxis'
 import Pointer from './Pointer'
 import SubmitClip from './SubmitClip'
@@ -309,14 +289,10 @@ import TextTrack from './tracks/TextTrack'
 import TransitionTrack from './tracks/TransitionTrack'
 import PictureDrr from './drrContainers/PictureDrr'
 import TextDrr from './drrContainers/TextDrr'
-import { formatDuration } from '@/utlis/smartCreation'
+import { formatDuration } from '@/components/onlineClip/global/functions'
 import { mapState } from 'vuex'
-import transitions from 'gl-transitions'
-import createTransition from 'gl-transition'
-import createTexture from 'gl-texture2d'
 export default {
   components: {
-    MaterialRecommendation,
     TimeAxis,
     Pointer,
     SubmitClip,
@@ -371,8 +347,8 @@ export default {
       },
       videoPlay: false,
       controlsIcons: {
-        play: require('../../assets/onlineClip/play.png'),
-        pause: require('../../assets/onlineClip/pause.png')
+        play: require('../../assets/play.png'),
+        pause: require('../../assets/pause.png')
       },
       banClip: false,
       isLimit: false,
@@ -429,8 +405,6 @@ export default {
       playingText: state => state.playingText,
       playingTextIndex: state => state.playingTextIndex,
       playingTransition: state => state.playingTransition,
-      materialTabList: state => state.materialTabList,
-      materialTabNewList: state => state.materialTabNewList,
       materialTrackList: state => state.materialTrackList,
       pictureTrackList: state => state.pictureTrackList,
       textTrackList: state => state.textTrackList
@@ -533,30 +507,6 @@ export default {
   methods: {
     handleOnclipClose () {
       // 关闭在线剪辑页面时的处理
-      if (this.materialTrackList.length || this.editId) {
-        this.$confirm('请注意保存，否则关闭后所有操作将会清除。', '提示', {
-          confirmButtonText: '确定关闭',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          if (this.editId) {
-            // 若编辑入口进 离开时
-            // 清除短视频生产页面的editId
-            this.$emit('clear-edit-id')
-          } else {
-            // 若非剪辑入口进 materialTabNewList需保存已选素材
-            this.$store.commit('updateArrayRevalue', { name: 'materialTabNewList', value: this.materialTabList })
-          }
-          this.$store.commit('clearAll')
-          this.$emit('online-clip-close')
-        })
-      } else {
-        // 若非剪辑入口进 materialTabNewList需保存已选素材
-        this.$store.commit('updateArrayRevalue', { name: 'materialTabNewList', value: this.materialTabList })
-        // 需清空materialTabList 避免列表闪现问题
-        this.$store.commit('updateArrayRevalue', { name: 'materialTabList', value: [] })
-        this.$emit('online-clip-close')
-      }
     },
     handleVideoDataSet (url, time) {
       // 设置播放区域视频地址及所播时刻
@@ -1045,28 +995,6 @@ export default {
         this.$refs.pointer.changePointerLeft(left)
       }
     },
-    initData () {
-      // 编辑入口进 - 初始化数据
-      this.clipLoading = true
-      const params = this.editId
-      this.$service.getWorksInfo({ editId: params }).then(data => {
-        this.videoInfo = { ...data.data, tag: data.data.tag.split(','), firstVideoH: data.data.firstVideoH * 1, firstVideoV: data.data.firstVideoV * 1 }
-        this.$store.commit('updateArrayRevalue', { name: 'materialTabList', value: data.data.rlsVideos })
-        this.$store.commit('updateArrayRevalue', { name: 'materialTrackList', value: data.data.rlsList })
-        this.tempTransitionList.push(...data.data.transitionsDTOS)
-        // this.$refs.transitionTrack.initTransition(this.tempTransitionList)
-        this.initTrack()
-        const params = {
-          list: ['pictureTrackList', 'textTrackList'],
-          prefix: ['picture', 'text'],
-          data: [data.data.pics, data.data.textDTOS],
-          videoFrame: this.videoFrame,
-          videoInfo: this.videoInfo,
-          vm: this
-        }
-        this.$store.commit('initTrackListContainer', params)
-      })
-    },
     initTrack () {
       // 初始化视频素材轨道及播放区域数据
       this.$nextTick(() => {
@@ -1207,13 +1135,14 @@ export default {
             // 保留句柄
             this.$refs[drrTarget][0].$refs.resizable[0].enabled = true
             break
-          case 'text':
+          case 'text': {
             const drr = this.$refs[drrTarget].find(item => {
               return item.$el.id === targetId
             })
             // 保留句柄
             drr.$refs.resizable[0].enabled = true
             break
+          }
         }
         // 激活对应drr
         this.$store.commit('updateValue', { name: 'activeName', value: name })
@@ -1297,13 +1226,13 @@ export default {
     }
   },
   created () {
-    if (this.editId) {
-      // 初始化数据 页面内容复现
-      this.initData()
-    } else {
-      // 非编辑入口进 已选素材列表取值处理
-      this.$store.commit('updateArrayRevalue', { name: 'materialTabList', value: this.materialTabNewList })
-    }
+    const list = [
+      { rlsId: '', editId: '', seq: '', status: 1, id: 319183, coocaaMId: '6uh9j6l00400', coocaaVId: 'r9mtl000000', thirdMovieId: 'o0032tld90n', thirdVideoId: 'm441e3rjq9kwpsc', duration: 5, frameDuration: 5, formattedDuration: '00:00:05', videoTitle: 'Firework', playUrl: require('@/assets/video/firework.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 5, startTime: 0, endTime: 5 },
+      { rlsId: '', editId: '', seq: '', status: 1, id: 319185, coocaaMId: '6uh9j6l00402', coocaaVId: 'r9mtl000002', thirdMovieId: 'o0032tld92n', thirdVideoId: 'm441e3rjq7kwpsc', duration: 15, frameDuration: 15, formattedDuration: '00:00:15', videoTitle: 'SunsetGlow', playUrl: require('@/assets/video/sunsetGlow.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 15, startTime: 0, endTime: 15 },
+      { rlsId: '', editId: '', seq: '', status: 1, id: 319184, coocaaMId: '6uh9j6l00401', coocaaVId: 'r9mtl000001', thirdMovieId: 'o0032tld91n', thirdVideoId: 'm441e3rjq8kwpsc', duration: 315, frameDuration: 315, formattedDuration: '00:05:15', videoTitle: 'JX3', playUrl: require('@/assets/video/JX3.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 315, startTime: 0, endTime: 315 }
+    ]
+    this.$store.commit('updateArrayRevalue', { name: 'materialTabList', value: list })
+    console.log('online----------list')
   },
   mounted () {
     window.addEventListener('keyup', this.keyUpMonitor)
@@ -1339,38 +1268,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-.search-tips
-  margin-left 10px
-  font-size 14px
-  color #666
-  vertical-align middle
-  cursor default
-  &:hover
-    color #666
-.dialog-header
-  padding-left 10px
-  letter-spacing 1px
-  color #666
-  span
-    vertical-align top
-.dialog-title
-  display inline-block
-  position relative
-  height 40px
-  margin-left 40px
-  line-height 40px
-  letter-spacing 1px
-  font-size 17px
-  font-weight 600
-  color #333
-  span
-    display inline-block
-    max-width 300px
-    white-space nowrap
-    overflow hidden
-    text-overflow ellipsis
-.dialog-input
-  width 250px
+.online-clip
+  text-align left
 .main-area
 .operations-area
 .axis-area
@@ -1536,56 +1435,42 @@ export default {
   .video-track
     position relative
     height 55px !important
-.online-clip-dialog
-  >>>.el-dialog
-    margin-top 0vh !important
-    height 100%
-    border-radius 0px
-    .el-dialog__header
-      padding 5px
-      height 40px
-      line-height 40px
-      font-size 16px
-      font-weight 600
-      border-radius 0px
-      background #f2f2f2
-    .el-dialog__body
-      padding 0px 10px 0px 0px
-      height calc(100vh - 70px)
-      overflow-y scroll
-.online-clip-tabs
-  height 100%
-  >>>.el-tabs__header
-    margin 0px
-    padding 0px 2px
-    background #fff
-    .el-tabs__item
-      margin 0px 15px
-      padding 0px
-      font-weight 400
-      color #888
-    .el-tabs__item.is-top:nth-child(2)
-      padding-left 0px
-    .el-tabs__item.is-top:last-child
-      padding-right 0px
-    .el-tabs__active-bar
-      display none
 >>>.el-tabs__header
+  margin 0px
+  padding 0px 2px
+  height 0px
+  background #fff
+  .el-tabs__item
+    margin 0px 15px
+    padding 0px
+    font-weight 400
+    color #888
+  .el-tabs__item.is-active
+    color #409eff !important
+  .el-tabs__item.is-top:nth-child(2)
+    padding-left 0px
+  .el-tabs__item.is-top:last-child
+    padding-right 0px
   .el-tabs__nav-wrap::after
     height 0px
-.online-clip-dialog
-  >>>.el-tabs__content
-    padding 10px
-    height 80%
-    overflow inherit
-    .el-tab-pane
-      position relative
-      height 100%
+  .el-tabs__active-bar
+    display none
+.online-clip-tabs
+  height 100%
+>>>.el-tabs__content
+  padding 10px
+  height 80%
+  overflow inherit
+  .el-tab-pane
+    position relative
+    margin-top 30px
+    height 90%
 >>>.el-row
   margin 0px
   margin-top 10px
 i
   cursor pointer
+  color #606266
   &:hover,
   &:focus
     color #409eff
@@ -1594,12 +1479,6 @@ i
     width 18px
     height 18px
     cursor pointer
->>>.el-dialog__body::-webkit-scrollbar
-  width 5px
-  height 5px
->>>.el-dialog__body::-webkit-scrollbar-thumb
-  border-radius 5px
-  background-color #ccc
 ::-webkit-scrollbar
   width 5px
   height 5px

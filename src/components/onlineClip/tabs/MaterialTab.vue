@@ -54,9 +54,9 @@
         <el-button class="methods-button" @click="$emit('show-material-dialog')">添加素材</el-button>
         <el-upload
           class="location-upload"
-          action="api/ccVideoProduction/uploadVideo.html"
           accept=".mp4"
           ref="materialUpload"
+          :action="uploadAction"
           :disabled="isUploading"
           :multiple="false"
           :show-file-list="false"
@@ -68,7 +68,8 @@
             <Loading v-show="isUploading" color="#409eff" :type="2"></Loading>
           </el-button>
         </el-upload>
-        <span class="message"> 本地仅支持上传MP4格式视频</span>
+        <span class="message"> *本地上传功能开发中</span>
+        <!-- <span class="message"> 本地仅支持上传MP4格式视频</span> -->
       </div>
       <!-- 本期不实现 -->
       <!-- <div class="methods-scan-way">
@@ -81,7 +82,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import Loading from '../Loading'
-import { formatDuration } from '@/utlis/smartCreation'
+import { formatDuration } from '@/components/onlineClip/global/functions'
 import { mapState } from 'vuex'
 export default {
   components: {
@@ -98,7 +99,10 @@ export default {
     return {
       isLimit: false,
       mouseTarget: null,
-      loadingImage: require('@/assets/onlineClip/material1004.png')
+      loadingImage: require('@/assets/material1004.png'),
+      uploadAction: '',
+      // 关闭接口
+      // uploadAction: 'api/ccVideoProduction/uploadVideo.html'
     }
   },
   computed: {
@@ -395,13 +399,14 @@ export default {
         canvas.height = 110
         video.setAttribute('crossOrigin', '*')
         video.src = list[i].playUrl
-        video.currentTime = list[i].startFrame
+        video.currentTime = 1
+        console.log('canvas------cover')
         video.oncanplay = () => {
           // 异步 需判断结果与请求是否对应
           if (!list[i]) {
             return false
           }
-          if (video.src !== list[i].playUrl || list[i].cover.indexOf('material1004') === -1) {
+          if (video.src.indexOf(list[i].playUrl) === -1 || list[i].cover.indexOf('material1004') === -1) {
             return false
           }
           canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height)
@@ -508,7 +513,7 @@ export default {
 .methods-button
   width 100px
   height 30px
-  line-height 10px
+  line-height 5px
   font-size 13px
   color #888
   border 1px solid #777

@@ -200,7 +200,7 @@
   </div>
 </template>
 <script>
-import { formatColor } from '@/utlis/smartCreation'
+import { formatColor } from '@/components/onlineClip/global/functions'
 import { mapState, mapMutations } from 'vuex'
 export default {
   props: {
@@ -224,7 +224,11 @@ export default {
         //   id: 1
         // }
       ],
-      textList: [],
+      textList: [
+        { wordSpacing: 0, borderW: false, bold: true, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 64, page: 1, text: '标题', alignment: 'center', fontColor: '#ffffff', frame: false },
+        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 50, page: 1, text: '副标题', alignment: 'center', fontColor: '#ffffff', frame: false },
+        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'cursive', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 24, page: 1, text: '字幕', alignment: 'center', fontColor: '#ffffff', frame: false }
+      ],
       fontStyleList: [ // 字体样式所需的对应操作数据
         {
           name: 'bold',
@@ -289,7 +293,7 @@ export default {
       isTextLoading: false,
       picShowAmount: 20,
       typeIndex: 0,
-      loadingImage: require('@/assets/onlineClip/material1004.png'),
+      loadingImage: require('@/assets/material1004.png'),
       fontFileList: [],
       fontFile: null,
       fontSize: null,
@@ -433,16 +437,17 @@ export default {
     }
   },
   created () {
-    this.isTextLoading = true
+    // 关闭接口
+    // this.isTextLoading = true
     // 获取字幕列表
-    this.$service.getTextList().then(data => {
-      this.textList = data.data
-      this.isTextLoading = false
-    })
-    // 获取字体列表
-    this.$service.getFontFileList().then(data => {
-      this.fontFileList = data.data
-    })
+    // this.$service.getTextList().then(data => {
+    //   this.textList = data.data
+    //   this.isTextLoading = false
+    // })
+    // // 获取字体列表
+    // this.$service.getFontFileList().then(data => {
+    //   this.fontFileList = data.data
+    // })
     this.$nextTick(() => {
       if (this.activeName === 'text') {
         // 若当前激活drr为字幕 则需对应显示操作标签页及对应数据
