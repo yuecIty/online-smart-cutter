@@ -100,7 +100,7 @@
           <el-button class="methods-button" :disabled="isPictureUploading">
             <span v-show="!isPictureUploading">本地上传</span>
             <!-- 贴图上传时的显示动画 -->
-            <Loading v-show="isPictureUploading" color="#26cb51" :type="2"></Loading>
+            <Loading v-show="isPictureUploading" color="#26CB51" :type="2"></Loading>
           </el-button>
         </el-upload>
         <span class="message"> *本地上传功能开发中</span>
@@ -605,8 +605,8 @@ export default {
   border-radius 5px
   transition all .3s
   &:hover
-    color #26cb51
-    border-color #26cb51
+    color #26CB51
+    border-color #26CB51
   .el-image
     width 100%
     height 100%
@@ -650,7 +650,7 @@ export default {
   line-height 35px
   cursor pointer
   &:hover
-    color #26cb51
+    color #26CB51
 .horizontal-icon
   transform rotate(90deg)
 .icon-ban
@@ -700,11 +700,11 @@ export default {
   cursor pointer
   transition all .3s
   &:hover
-    border 1px solid #26cb51
-    color #26cb51
+    border 1px solid #26CB51
+    color #26CB51
 .category-active
-  border 1px solid #26cb51
-  color #26cb51
+  border 1px solid #26CB51
+  color #26CB51
 .picture-empty
   height 20vh
   line-height 20vh
@@ -713,7 +713,7 @@ export default {
   color #aaa
 .button-style
   position absolute
-  bottom -3px
+  bottom 0px
   // 避免遮住滚动条
   width 99%
 .location-upload
@@ -728,9 +728,9 @@ export default {
     font-size 18px
     cursor pointer
     &:hover
-      color #26cb51
+      color #26CB51
 .active-picture-list
-  color #26cb51
+  color #26CB51
 .methods-button
   width 100px
   height 30px
@@ -742,12 +742,7 @@ export default {
   &:focus
     background #000
   &:hover
-    color #26cb51
-    border-color #26cb51
+    color #26CB51
+    border-color #26CB51
     background #000
-.message
-  font-size 12px
-  color #ccc
-  cursor default
-  vertical-align middle
 </style>

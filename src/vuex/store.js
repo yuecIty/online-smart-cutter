@@ -377,7 +377,7 @@ const mutations = {
     state.selected.width = Math.round(realTarget.getBoundingClientRect().width)
     state.selected.dataURL = realTarget.style ? realTarget.style.backgroundImage : ''
     state.targetTrackIndex = state.selected.trackIndex
-    realTarget.style.boxShadow = 'inset 0px 0px 2px 1px #9FE4B1'
+    realTarget.style.boxShadow = 'inset 0px 0px 2px 1px #26CB51'
     // 暂时兼容未使用vuex的视频素材轨道
     const realObject = params.realList ? params.realList[params.index] : state[params.list][params.trackIndex][params.index]
     state.selectedTarget = realObject
@@ -512,7 +512,7 @@ const mutations = {
       state.mouseElement.style.lineHeight = state.defaultTextHeight + 'px'
       state.mouseElement.style.backgroundColor = '#F2F2F2'
       state.mouseElement.style.textAlign = 'center'
-      state.mouseElement.style.boxShadow = 'inset 0px 0px 2px 1px #9FE4B1'
+      state.mouseElement.style.boxShadow = 'inset 0px 0px 2px 1px #26CB51'
       state.mouseElement.style.color = '#333333'
     }
     // 添加元素到DOM
@@ -545,7 +545,7 @@ const mutations = {
     state.targetTrackIndex = e.target.id.slice(index + 5) * 1
     // 拖拽元素进入dropZone 添加boxShadow
     let target = state.mouseElement
-    target.style.boxShadow = 'inset 0px 0px 2px 1px #9FE4B1'
+    target.style.boxShadow = 'inset 0px 0px 2px 1px #26CB51'
   },
   dragTrackOver(state, params) {
     // 须在对应轨道操作

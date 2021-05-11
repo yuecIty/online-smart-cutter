@@ -85,7 +85,7 @@ i
   cursor pointer
   &:hover,
   &:focus
-    color #26cb51
+    color #26CB51
 >>> .el-progress
   display inline-block
   vertical-align top

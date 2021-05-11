@@ -1,6 +1,13 @@
 <template>
-  <div id="onlineClip" class="online-clip">
-    <el-row :gutter="5" class="main-area">
+  <div
+    v-loading="isClipLoading"
+    element-loading-text="努力加载中..."
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    element-loading-custom-class="loading-style"
+    id="onlineClip"
+    class="online-clip"
+  >
+    <el-row class="main-area">
       <el-col :span="15" class="material-cols" ref="tabsCol">
         <!-- tabs素材区域 -->
         <el-row class="material-area">
@@ -155,7 +162,7 @@
           <span
             class="track-type-icon"
             :style="{
-              color: showUlIndex === index && ulName === 'text' && isShowUl ? '#26cb51' : '#606266'
+              color: showUlIndex === index && ulName === 'text' && isShowUl ? '#26CB51' : '#606266'
             }"
           > T </span>
         </div>
@@ -305,7 +312,7 @@ export default {
   },
   data () {
     return {
-      clipLoading: false,
+      isClipLoading: false,
       onlineTab: 'materialTab',
       tempTabName: 'materialTab',
       isShowMaterialAdd: false,
@@ -1000,8 +1007,6 @@ export default {
 
         this.$store.commit('updateValue', { name: 'materialTrackWidth', value: this.materialTrackWidth + list[count - 1].trackEndTime * this.trackScale })
         this.handleSelectedClick(document.querySelector('#clip0'), 0, 'materialTrackList')
-
-        this.clipLoading = false
       })
     },
     videoTimeUpdateMonitor (e) {
@@ -1154,7 +1159,7 @@ export default {
       this.videoFrame.width = frameWidth
       this.videoFrame.height = frameWidth * 720 / 1280
       // 同步素材tabs的高度
-      document.querySelector('.online-clip-tabs .el-tabs__content').style.height = this.videoFrame.height + 'px'
+      // document.querySelector('.online-clip-tabs .el-tabs__content').style.height = this.videoFrame.height + 'px'
       // 更新播放区域高度
       this.$refs.videoFrame.style.height = this.videoFrame.height + 'px'
       // 更新播放区域比例数值
@@ -1211,6 +1216,7 @@ export default {
     }
   },
   created () {
+    this.isClipLoading = true
     const list = [
       { rlsId: '', editId: '', seq: '', status: 1, id: 319183, coocaaMId: '6uh9j6l00400', coocaaVId: 'r9mtl000000', thirdMovieId: 'o0032tld90n', thirdVideoId: 'm441e3rjq9kwpsc', duration: 5, frameDuration: 5, formattedDuration: '00:00:05', videoTitle: 'Firework', playUrl: require('@/assets/video/firework.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 5, startTime: 0, endTime: 5 },
       { rlsId: '', editId: '', seq: '', status: 1, id: 319185, coocaaMId: '6uh9j6l00402', coocaaVId: 'r9mtl000002', thirdMovieId: 'o0032tld92n', thirdVideoId: 'm441e3rjq7kwpsc', duration: 15, frameDuration: 15, formattedDuration: '00:00:15', videoTitle: 'SunsetGlow', playUrl: require('@/assets/video/sunsetGlow.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 15, startTime: 0, endTime: 15 },
@@ -1236,6 +1242,10 @@ export default {
       this.videoTarget.addEventListener('timeupdate', this.videoTimeUpdateMonitor)
       this.videoTarget.addEventListener('play', this.drawCanvasVideo)
       this.videoTarget.addEventListener('pause', this.stopCanvasVideo)
+      setTimeout(() => {
+        this.isClipLoading = false
+        // 关闭加载动画
+      }, 500)
     })
   },
   beforeDestroy () {
@@ -1262,23 +1272,23 @@ export default {
   min-width 1310px
 .main-area
   margin-top 0px !important
-  min-height 60%
+  min-height 58vh
   .material-area
     margin-top 0px
-    height 100%
 .diy-icon-t
   &:hover
-    color #26cb51
+    color #26CB51
 .controls-duration
   display inline-block
   position absolute
-  top 5px
+  top 10px
   left 4vw
   font-size 14px
   color #ccc
 .operations-area
   position relative
   height 40px
+  box-shadow #128430 0px -1px
 .operations-convenient
   display inline-block
   position absolute
@@ -1287,6 +1297,7 @@ export default {
   margin-left 15px
   vertical-align super
   i
+    color #606266
     margin-right 20px
     font-size 20px
 .icon-ban
@@ -1323,7 +1334,7 @@ export default {
   font-size 13px
   color #fff
   border 0px
-  background #26cb51
+  background #26CB51
   &:hover,
   &:focus
     color #fff
@@ -1334,8 +1345,9 @@ export default {
   overflow hidden
 .clip-resource-icons
   position relative
+  margin-top 10px
   text-align center
-  font-size 17px
+  font-size 18px
 .empty-icon
   width 100%
   height 25px
@@ -1354,7 +1366,7 @@ export default {
   color #606266
   &:hover,
   &:focus
-    color #26cb51
+    color #26CB51
     cursor default
 .el-icon-video-camera
   height 65px
@@ -1363,28 +1375,31 @@ export default {
   position relative
   height 235px
   overflow auto
+  .time-axis
+    margin 0px 0px 10px
+    position relative
+    z-index 2
 .pointer-style
   position relative
-.time-axis
-  margin-top 0px !important
-  position relative
-  z-index 2
 .tracks-container
   overflow-x auto
 .video-cols
   position relative
   padding 0px !important
+  height 55vh
   text-align center
 .video-frame
   position relative
+  top 15%
   width 100%
 .video-controls
   position relative
-  padding-top 5px
+  top 15%
+  padding-top 10px
   width 100%
 .video-frame,
 .video-controls
-  background #000
+  background #1C1D1C
 .canvas-video
   position absolute
   top 0px
@@ -1420,6 +1435,7 @@ export default {
     margin-top 0px
     margin-bottom 10px
     height 30px
+    background #1c1d1c
   .video-track
     position relative
     height 55px !important
@@ -1432,18 +1448,26 @@ export default {
     padding 0px
     font-weight 400
     color #888
+    &:hover,
+    &:focus
+      color #26CB51
   .el-tabs__item.is-active
-    color #26cb51 !important
+    color #26CB51 !important
   .el-tabs__item.is-top:nth-child(2)
     padding-left 0px
   .el-tabs__item.is-top:last-child
     padding-right 0px
+  .el-tabs__nav-wrap 
+    padding-top 10px
+    box-shadow #128430 0px 1px
   .el-tabs__nav-wrap::after
     height 0px
   .el-tabs__active-bar
     display none
 .online-clip-tabs
   height 100%
+  >>>.el-tabs__content
+    height 55vh
 >>>.el-tabs__content
   padding 10px
   height 80%
@@ -1460,7 +1484,7 @@ i
   color inherit
   &:hover,
   &:focus
-    color #26cb51
+    color #26CB51
 .controls-icons
   >>>.el-image
     width 18px

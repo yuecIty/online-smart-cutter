@@ -1126,10 +1126,6 @@ export default {
     height 10px !important
 .auto-tag-button
   margin-right 10px
-.message
-  font-size 12px
-  color #ccc
-  cursor default
 .tags-container
   margin-top 18px
   padding-left 90px
@@ -1158,7 +1154,7 @@ export default {
     cursor pointer
     &:hover,
     &:focus
-      color #26cb51
+      color #26CB51
 .avatar-uploader
   display inline-block
   margin-right 10px
@@ -1168,7 +1164,7 @@ export default {
   cursor pointer
   &:hover,
   &:focus
-    border-color #26cb51
+    border-color #26CB51
 .horizontal-cover-uploader
   margin-left 90px
 .horizontal-cover-uploader, .horizontal-cover, .horizontal-cover-icon
@@ -1183,7 +1179,7 @@ export default {
   color #333
   &:hover,
   &:focus
-    color #26cb51
+    color #26CB51
 .pic-style
   display inline-block
   margin-bottom 0px

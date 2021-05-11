@@ -148,7 +148,7 @@
             class="font-style-style"
             :class="item.className"
             :style="{
-              color: getIsActive(item) || overIndex === index ? '#26cb51' : '#707070'
+              color: getIsActive(item) || overIndex === index ? '#26CB51' : '#707070'
             }"
             @mouseover="overIndex = index"
             @mouseout="overIndex = null"
@@ -475,8 +475,8 @@ export default {
   border-radius 5px
   transition all .3s
   &:hover
-    color #26cb51
-    border-color #26cb51
+    color #26CB51
+    border-color #26CB51
   .el-image
     width 100%
     height 100%
@@ -508,11 +508,11 @@ export default {
   cursor pointer
   transition all .3s
   &:hover
-    border 1px solid #26cb51
-    color #26cb51
+    border 1px solid #26CB51
+    color #26CB51
 .category-active
-  border 1px solid #26cb51
-  color #26cb51
+  border 1px solid #26CB51
+  color #26CB51
 .text-operation
   span
     display inline-block
@@ -549,7 +549,7 @@ export default {
   display inline-block
   margin 0px 10px
   &:hover
-    color #26cb51
+    color #26CB51
     cursor pointer
 .enlarge-icon
   font-size 18px

@@ -65,7 +65,7 @@
         >
           <el-button class="methods-button" :disabled="isUploading">
             <span v-show="!isUploading">本地上传</span>
-            <Loading v-show="isUploading" color="#26cb51" :type="2"></Loading>
+            <Loading v-show="isUploading" color="#26CB51" :type="2"></Loading>
           </el-button>
         </el-upload>
         <span class="message"> *本地上传功能开发中</span>
@@ -451,7 +451,7 @@ export default {
   border-radius 3px
   transition all .3s
   &:hover
-    border-color #26cb51
+    border-color #26CB51
   video,
   .el-image
     width 100%
@@ -468,7 +468,7 @@ export default {
 .material-add
   right 2px
   font-weight 600
-  color #26cb51
+  color #26CB51
   cursor pointer
 .material-delete
   left 2px
@@ -513,17 +513,12 @@ export default {
   &:focus
     background #000
   &:hover
-    color #26cb51
-    border-color #26cb51
+    color #26CB51
+    border-color #26CB51
     background #000
 .location-upload
   display inline-block
   margin-left 10px
-.message
-  font-size 12px
-  color #ccc
-  cursor default
-  vertical-align middle
 .methods-scan-way
   position absolute
   top 25px
