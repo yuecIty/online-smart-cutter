@@ -222,8 +222,8 @@ export default {
       pictureList: [
         { modifyTime: '2021-01-18 15:28:56', thirdId: '1', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/circle.jpg'), fileUrl: require('@/assets/video/circle.webm'), title: 'Circle', categoryId:129, fileType: 'video', picId:1, status:1 },
         { modifyTime: '2021-01-18 15:28:56', thirdId: '2', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/line.jpg'), fileUrl: require('@/assets/video/line.webm'), title: 'Line', categoryId:128, fileType: 'video', picId:2, status:1 },
-        { modifyTime: '2021-01-18 15:28:56', thirdId: '3', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/forest.jpg'), fileUrl: require('@/assets/picture/forest.jpg'), title: '烟雾实拍遮罩04', categoryId:127, fileType: 'picture', picId:3, status:1 },
-        { modifyTime: '2021-01-18 15:28:56', thirdId: '4', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/snow.jpg'), fileUrl: require('@/assets/picture/snow.jpg'), title: '烟雾实拍遮罩04', categoryId:126, fileType: 'picture', picId:4, status:1 }
+        { modifyTime: '2021-01-18 15:28:56', thirdId: '3', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/forest.jpg'), fileUrl: require('@/assets/picture/forest.jpg'), title: 'Forest', categoryId:127, fileType: 'picture', picId:3, status:1 },
+        { modifyTime: '2021-01-18 15:28:56', thirdId: '4', createdTime: '2021-01-18 15:28:56', picUrl: require('@/assets/picture/snow.jpg'), fileUrl: require('@/assets/picture/snow.jpg'), title: 'Snow', categoryId:126, fileType: 'picture', picId:4, status:1 }
       ],
       pictureFileList: [],
       picShowAmount: 80,
@@ -527,10 +527,10 @@ export default {
       // 悬停预览内容加载完毕的相关数据处理
       this.isCardLoading = false
       let targetList = this.isShowLocal ? this.pictureFileList : this.pictureList
-      if (e.target.src === this.cardSrc) {
+      if (e.target.src.indexOf(this.cardSrc) !== -1) {
         // 异步 需要确认结果与请求一致
         const index = targetList.findIndex(item => {
-          return item.fileUrl === this.cardSrc
+          return this.cardSrc === item.fileUrl
         })
         if (this.cardType === 'video') {
           // 视频贴图 时长为视频时长

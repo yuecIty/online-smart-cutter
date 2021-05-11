@@ -10,7 +10,6 @@
               <MaterialTab
                 v-if="onlineTab === 'materialTab'"
                 ref="materialTab"
-                :edit-id="editId"
                 @update-date="updateData"
                 @video-data="handleVideoDataSet"
                 @video-cover="drawCanvasVideoCover"
@@ -138,7 +137,6 @@
         @close="handleAlertClose"
       ></el-alert> -->
       <div class="operations-save">
-        <span v-if="!!editId">保存于{{ videoInfo.modifyTime }}</span>
         <el-button class="save-my-works" @click="handleSaveOrSubmit(0)">保存至我的作品</el-button>
         <el-button class="save-clip" @click="handleSaveOrSubmit(1)">提交剪辑</el-button>
       </div>
@@ -264,7 +262,6 @@
       v-if="isSaveOrSubmit"
       :is-save-or-submit="isSaveOrSubmit"
       :save-or-submit="saveOrSubmit"
-      :edit-id="editId"
       :form-info="videoInfo"
       :video-frame="videoFrame"
       @submit-close="handleSubmitClose"
@@ -305,16 +302,6 @@ export default {
     TransitionTrack,
     PictureDrr,
     TextDrr
-  },
-  props: {
-    isShowOnlineClip: {
-      type: Boolean,
-      default: false
-    },
-    editId: {
-      type: Number,
-      default: null
-    }
   },
   data () {
     return {
@@ -1078,7 +1065,7 @@ export default {
       }
       // space 控制播放区域的播放/暂停
       // 控制条件: 处于在线剪辑页面 没有处于编辑状态的内容 没有打开保存/提交剪辑弹窗 没有打开素材添加弹窗
-      if (e.keyCode === 32 && this.isShowOnlineClip && !this.isTextEdit && !this.isSaveOrSubmit && !this.isShowMaterialAdd) {
+      if (e.keyCode === 32 && !this.isTextEdit && !this.isSaveOrSubmit && !this.isShowMaterialAdd) {
         this.handleVideoPlayOrPause()
       }
     },
@@ -1268,6 +1255,7 @@ export default {
 <style lang="stylus" scoped>
 .online-clip
   text-align left
+  user-select none // 禁止用户的选中行为
 .main-area
 .operations-area
 .axis-area
@@ -1469,7 +1457,7 @@ export default {
   margin-top 10px
 i
   cursor pointer
-  color #606266
+  color inherit
   &:hover,
   &:focus
     color #26cb51

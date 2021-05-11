@@ -770,11 +770,11 @@ const mutations = {
       this.commit('formatList', state.targetTrackIndex)
       this.commit('formatList', state.trackIndex)
       this.commit('getTracksDration', state.list)
-      this.dispatch('setTrackDraw', true)
+      this.dispatch('setTrackDraw', { way: true, clear: true})
     } else {
       this.commit('formatList', state.targetTrackIndex)
       this.commit('getTracksDration', state.list)
-      this.dispatch('setTrackDraw', false)
+      this.dispatch('setTrackDraw', { way: false, clear: true})
     }
   },
   formatList (state, listIndex) {
@@ -951,7 +951,7 @@ const mutations = {
     // 重新获得playing- 实时更新当前播放区域的drr显示
     state.needPointerJudge.isNeed = true
     state.needPointerJudge.target = state.list
-    this.dispatch('setTrackDraw', true)
+    this.dispatch('setTrackDraw', { way: true, clear: true})
   },
   drrActive (state, params) {
     state.activeName = params.activeTarget
@@ -1247,18 +1247,21 @@ const actions = {
       wnh.height = img.height
     }, 40)
   },
-  setTrackDraw (context, way) {
+  setTrackDraw (context, params) {
     // way: 是否对当前list的所有轨道进行绘制
+    // clear: 是否清除相关数据
     context.state.vm.$nextTick(() => {
       const state = context.state
-      if (way) {
+      if (params.way) {
         for (let i = 0; i < state[state.list].length; i++) {
           context.commit('trackDraw', i)
         }
       } else {
         context.commit('trackDraw')
       }
-      context.commit('clearDragData')
+      if (params.clear) {
+        context.commit('clearDragData')
+      }
     })
   },
   setAllTrackDraw (context, params) {
@@ -1285,7 +1288,7 @@ const actions = {
   },
   async setNextTrackBlock (context) {
     // 触发页面渲染及轨道显示更新
-    await this.dispatch('setTrackDraw', false)
+    await this.dispatch('setTrackDraw', { way: false, clear: false })
     // 选中下一个轨道块
     const state = context.state
     const index = state.selected.index
@@ -1301,6 +1304,8 @@ const actions = {
     // 判断playing-
     state.needPointerJudge.isNeed = true
     state.needPointerJudge.target = state.list
+    // 清空相关数据
+    context.commit('clearDragData')
   }
 }
 
