@@ -65,7 +65,7 @@
         >
           <el-button class="methods-button" :disabled="isUploading">
             <span v-show="!isUploading">本地上传</span>
-            <Loading v-show="isUploading" color="#409eff" :type="2"></Loading>
+            <Loading v-show="isUploading" color="#26cb51" :type="2"></Loading>
           </el-button>
         </el-upload>
         <span class="message"> *本地上传功能开发中</span>
@@ -437,12 +437,6 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
-::-webkit-scrollbar
-  width 5px
-  height 5px
-::-webkit-scrollbar-thumb
-  border-radius 5px
-  background-color #ccc
 .material-tab
   height 100%
 .material-container
@@ -453,12 +447,11 @@ export default {
   position relative
   margin 0px 5px 5px
   width 170px
-  border 1px solid #f2f2f2
+  border 1px solid #888888
   border-radius 3px
-  background #ececec
   transition all .3s
   &:hover
-    border-color #409eff
+    border-color #26cb51
   video,
   .el-image
     width 100%
@@ -475,7 +468,7 @@ export default {
 .material-add
   right 2px
   font-weight 600
-  color #409eff
+  color #26cb51
   cursor pointer
 .material-delete
   left 2px
@@ -506,7 +499,6 @@ export default {
   position absolute
   bottom 5px
   width 100%
-  background #f2f2f2
 .methods-button-group
   display inline-block
   margin 5px 2px 0px
@@ -517,12 +509,13 @@ export default {
   font-size 13px
   color #888
   border 1px solid #777
+  background #000
   &:focus
-    background #fff
+    background #000
   &:hover
-    color #409eff
-    border-color #409eff
-    background #fff
+    color #26cb51
+    border-color #26cb51
+    background #000
 .location-upload
   display inline-block
   margin-left 10px

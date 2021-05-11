@@ -1,250 +1,248 @@
 <template>
   <div id="onlineClip" class="online-clip">
-    <div >
-      <el-row :gutter="5" class="main-area">
-        <el-col :span="15" class="material-cols" ref="tabsCol">
-          <!-- tabs素材区域 -->
-          <el-row class="material-area">
-            <el-tabs v-model="onlineTab" class="online-clip-tabs">
-              <el-tab-pane name="materialTab">
-                <span slot="label"><i class="el-icon-folder-opened"></i> 已选素材</span>
-                <MaterialTab
-                  v-if="onlineTab === 'materialTab'"
-                  ref="materialTab"
-                  :edit-id="editId"
-                  @update-date="updateData"
-                  @video-data="handleVideoDataSet"
-                  @video-cover="drawCanvasVideoCover"
-                  @selected-click="handleSelectedClick"
-                  @show-material-dialog="handleShowMaterialDialog"
-                ></MaterialTab>
-              </el-tab-pane>
-              <el-tab-pane name="pictureTab">
-                <span slot="label"><i class="el-icon-picture-outline"></i> 贴图</span>
-                <PictureTab
-                  v-if="onlineTab === 'pictureTab'"
-                  ref="pictureTab"
-                  :tab-name="onlineTab"
-                  @icon-add="handleIconAdd"
-                ></PictureTab>
-              </el-tab-pane>
-              <el-tab-pane name="textTab">
-                <span slot="label">
-                  <span class="diy-icon-t">T</span> 字幕
-                </span>
-                <TextTab
-                  v-if="onlineTab === 'textTab'"
-                  :is-edit="isTextEdit"
-                  @icon-add="handleIconAdd"
-                  @stop-edit="handleCancelEdit"
-                ></TextTab>
-              </el-tab-pane>
-              <el-tab-pane>
-                <span slot="label"><i class="el-icon-guide"></i> 转场</span>
-                <TempMessage></TempMessage>
-              </el-tab-pane>
-              <el-tab-pane>
-                <span slot="label"><i class="el-icon-service"></i> 配乐</span>
-                <TempMessage></TempMessage>
-              </el-tab-pane>
-              <el-tab-pane>
-                <span slot="label"><i class="el-icon-magic-stick"></i> 滤镜</span>
-                <TempMessage></TempMessage>
-              </el-tab-pane>
-            </el-tabs>
-          </el-row>
-        </el-col>
-        <el-col :span="9" class="video-cols" ref="videoCols">
-          <!-- 播放及drr操作区域 -->
-          <div v-loading="isLoadingVideo" class="video-frame" ref="videoFrame">
-            <video id="video" ref="video" preload="auto" crossOrigin="*" style="display: none" :src="videoSrc"></video>
-            <!-- <video
-              ref="videoTransition"
-              style="display: none"
-              preload="auto"
-              crossOrigin="*"
-              :src="playingTransition ? playingTransition.transitionMaterialUrl : ''"
-            ></video> -->
-            <canvas id="canvasVideo" ref="canvasVideo" class="canvas-video"></canvas>
-            <!-- 先定义的在下层 -->
-            <PictureDrr
-              v-for="(item, index) in reversePictureList"
-              :key="'pictureDrr' + getReverseIndex(index, reversePictureList.length)"
-              ref="pictureDrr"
-              :track-index="getReverseIndex(index, reversePictureList.length)"
-              :track-list="item"
-              :key-code="keyCode"
-              :video-play="videoPlay"
-              :is-text-edit="isTextEdit"
-              @video-pause="handleVideoPause"
-              @stop-edit="handleCancelEdit"
-            ></PictureDrr>
-            <TextDrr
-              v-for="(item, index) in reverseTextList"
-              :key="'textDrr' + getReverseIndex(index, reverseTextList.length)"
-              ref="textDrr"
-              :id="'textDrr' + getReverseIndex(index, reverseTextList.length)"
-              :track-index="getReverseIndex(index, reverseTextList.length)"
-              :track-list="item"
-              :key-code="keyCode"
-              :video-play="videoPlay"
-              :is-text-edit="isTextEdit"
-              @text-edit="handleTextEdidState"
-              @video-pause="handleVideoPause"
-              @stop-edit="handleCancelEdit"
-            ></TextDrr>
-          </div>
-          <div class="video-controls">
-            <!-- 播放器控制条区域 -->
-            <div class="controls-icons">
-              <el-image v-if="!videoPlay" class="controls-play" :src="controlsIcons.play" @click="handleVideoPlay"></el-image>
-              <el-image v-if="videoPlay" class="controls-pause" :src="controlsIcons.pause" @click="handleVideoPause"></el-image>
-            </div>
-            <div class="controls-duration">
-              {{ trackCurrentTime }} / {{ trackDurationString }}
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row class="operations-area">
-        <div class="operations-convenient">
-          <!-- 本期不实现 -->
-          <!-- <i class="el-icon-back"></i>
-          <i class="el-icon-right"></i> -->
-          <i
-            :class="{
-              'el-icon-delete': true,
-              'icon-ban': !selected.type
-            }"
-            @click="keyUpMonitor({ keyCode: 46 })"
-          ></i>
-          <i
-            :class="{
-              'el-icon-scissors': true,
-              'icon-ban': materialTrackList.length === 0 || banClip || videoPlay
-            }"
-            @click="handleMediaClip"
-          ></i>
-        </div>
-        <!-- 本期不实现 -->
-        <!-- <TimeScaleSlider
-          :sliderData="sliderData"
-        ></TimeScaleSlider> -->
-        <!-- <el-alert
-          class="transition-alert"
-          type="warning"
-          close-text="知道了"
-          title="【视频轨道】的添加、删除、移动、剪辑等操作，均会【重置所有转场】"
-          show-icon
-          @close="handleAlertClose"
-        ></el-alert> -->
-        <div class="operations-save">
-          <span v-if="!!editId">保存于{{ videoInfo.modifyTime }}</span>
-          <el-button class="save-my-works" @click="handleSaveOrSubmit(0)">保存至我的作品</el-button>
-          <el-button class="save-clip" @click="handleSaveOrSubmit(1)">提交剪辑</el-button>
-        </div>
-      </el-row>
-      <el-row class="axis-area">
-        <!-- 轨道内容区域 -->
-        <el-col :span="1" class="clip-resource-icons" ref="clipResourceIcons">
-          <!-- 左侧图标区域 -->
-          <div class="empty-icon" ref="emptyIcon"><!-- 用于设置页面样式 --></div>
-          <div
-            v-for="(item, index) in textTrackList"
-            :key="index"
-            @mouseover="handleIconHover(index, '文字', 'text')"
-            @mouseout="isShowUl = false"
-          >
-            <span
-              class="track-type-icon"
-              :style="{
-                color: showUlIndex === index && ulName === 'text' && isShowUl ? '#409eff' : '#606266'
-              }"
-            > T </span>
-          </div>
-          <i class="el-icon-picture-outline track-type-icon"></i>
-          <i class="el-icon-video-camera track-type-icon"></i>
-          <i class="el-icon-service track-type-icon"></i>
-          <!-- 多轨道设置ul: 提供轨道添加 删除 复制 -->
-          <MultiTracksUl
-            v-show="isShowUl"
-            class="multi-tracks-ul"
-            :index="showUlIndex"
-            :icon-width="iconWidth"
-            :text="ulText"
-            :name="ulName"
-            :style="{
-              top: getUlTop() + 15 + 'px',
-              left: iconWidth + 'px'
-            }"
-            @mouseover.native="isShowUl = true"
-            @mouseout.native="isShowUl = false"
-          ></MultiTracksUl>
-        </el-col>
-        <el-col :span="23" ref="clipResource" class="clip-resource">
-          <!-- 右侧轨道操作区域 -->
-          <Pointer
-            ref="pointer"
-            class="pointer-style"
+    <el-row :gutter="5" class="main-area">
+      <el-col :span="15" class="material-cols" ref="tabsCol">
+        <!-- tabs素材区域 -->
+        <el-row class="material-area">
+          <el-tabs v-model="onlineTab" class="online-clip-tabs">
+            <el-tab-pane name="materialTab">
+              <span slot="label"><i class="el-icon-folder-opened"></i> 已选素材</span>
+              <MaterialTab
+                v-if="onlineTab === 'materialTab'"
+                ref="materialTab"
+                :edit-id="editId"
+                @update-date="updateData"
+                @video-data="handleVideoDataSet"
+                @video-cover="drawCanvasVideoCover"
+                @selected-click="handleSelectedClick"
+                @show-material-dialog="handleShowMaterialDialog"
+              ></MaterialTab>
+            </el-tab-pane>
+            <el-tab-pane name="pictureTab">
+              <span slot="label"><i class="el-icon-picture-outline"></i> 贴图</span>
+              <PictureTab
+                v-if="onlineTab === 'pictureTab'"
+                ref="pictureTab"
+                :tab-name="onlineTab"
+                @icon-add="handleIconAdd"
+              ></PictureTab>
+            </el-tab-pane>
+            <el-tab-pane name="textTab">
+              <span slot="label">
+                <span class="diy-icon-t">T</span> 字幕
+              </span>
+              <TextTab
+                v-if="onlineTab === 'textTab'"
+                :is-edit="isTextEdit"
+                @icon-add="handleIconAdd"
+                @stop-edit="handleCancelEdit"
+              ></TextTab>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><i class="el-icon-guide"></i> 转场</span>
+              <TempMessage></TempMessage>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><i class="el-icon-service"></i> 配乐</span>
+              <TempMessage></TempMessage>
+            </el-tab-pane>
+            <el-tab-pane>
+              <span slot="label"><i class="el-icon-magic-stick"></i> 滤镜</span>
+              <TempMessage></TempMessage>
+            </el-tab-pane>
+          </el-tabs>
+        </el-row>
+      </el-col>
+      <el-col :span="9" class="video-cols" ref="videoCols">
+        <!-- 播放及drr操作区域 -->
+        <div v-loading="isLoadingVideo" class="video-frame" ref="videoFrame">
+          <video id="video" ref="video" preload="auto" crossOrigin="*" style="display: none" :src="videoSrc"></video>
+          <!-- <video
+            ref="videoTransition"
+            style="display: none"
+            preload="auto"
+            crossOrigin="*"
+            :src="playingTransition ? playingTransition.transitionMaterialUrl : ''"
+          ></video> -->
+          <canvas id="canvasVideo" ref="canvasVideo" class="canvas-video"></canvas>
+          <!-- 先定义的在下层 -->
+          <PictureDrr
+            v-for="(item, index) in reversePictureList"
+            :key="'pictureDrr' + getReverseIndex(index, reversePictureList.length)"
+            ref="pictureDrr"
+            :track-index="getReverseIndex(index, reversePictureList.length)"
+            :track-list="item"
+            :key-code="keyCode"
             :video-play="videoPlay"
-            :width-range="trackDuration * trackScale"
-            @pause-video="handleVideoPause"
-            @set-pointer-track="setPointerAndTrack"
-            @current-material="judgeVideoSource"
-            @current-picture="judgePictureSource"
-            @current-text="judgeTextSource"
-            @current-transition="judgeTransitionSource"
-          ></Pointer>
-          <el-row class="time-axis" ref="timeAxis">
-            <TimeAxis
-              :material-duration="trackDuration"
-              @move-by-axis="changePointerStart"
-            ></TimeAxis>
-          </el-row>
-          <el-row
-            v-for="(item, index) in textTrackList"
-            :key="'textTrack' + index"
-            :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
-          >
-            <TextTrack
-              ref="textTrack"
-              :track-index="index"
-              :track-list="item"
-              @click-text="handleTrackClick"
-              @mousedown-text="handleTrackMouseDown"
-            ></TextTrack>
-          </el-row>
-          <el-row
-            v-for="(item, index) in pictureTrackList"
-            :key="'pictureTrack' + index"
-            :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
-          >
-            <PictureTrack
-              ref="pictureTrack"
-              :track-list="item"
-              @click-picture="handleTrackClick"
-              @mousedown-picture="handleTrackMouseDown"
-            ></PictureTrack>
-          </el-row>
-          <el-row
-            class="video-track"
-            id="video-track"
-            :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
-          >
-            <MaterialTrack
-              :video-play="videoPlay"
-              @selected-click="handleSelectedClick"
-              @video-pause="handleVideoPause"
-            ></MaterialTrack>
-            <TransitionTrack
-              ref="transitionTrack"
-              :is-save-or-submit="isSaveOrSubmit"
-            ></TransitionTrack>
-          </el-row>
-          <el-row :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"></el-row>
-        </el-col>
-      </el-row>
-    </div>
+            :is-text-edit="isTextEdit"
+            @video-pause="handleVideoPause"
+            @stop-edit="handleCancelEdit"
+          ></PictureDrr>
+          <TextDrr
+            v-for="(item, index) in reverseTextList"
+            :key="'textDrr' + getReverseIndex(index, reverseTextList.length)"
+            ref="textDrr"
+            :id="'textDrr' + getReverseIndex(index, reverseTextList.length)"
+            :track-index="getReverseIndex(index, reverseTextList.length)"
+            :track-list="item"
+            :key-code="keyCode"
+            :video-play="videoPlay"
+            :is-text-edit="isTextEdit"
+            @text-edit="handleTextEdidState"
+            @video-pause="handleVideoPause"
+            @stop-edit="handleCancelEdit"
+          ></TextDrr>
+        </div>
+        <div class="video-controls">
+          <!-- 播放器控制条区域 -->
+          <div class="controls-icons">
+            <el-image v-if="!videoPlay" class="controls-play" :src="controlsIcons.play" @click="handleVideoPlay"></el-image>
+            <el-image v-if="videoPlay" class="controls-pause" :src="controlsIcons.pause" @click="handleVideoPause"></el-image>
+          </div>
+          <div class="controls-duration">
+            {{ trackCurrentTime }} / {{ trackDurationString }}
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="operations-area">
+      <div class="operations-convenient">
+        <!-- 本期不实现 -->
+        <!-- <i class="el-icon-back"></i>
+        <i class="el-icon-right"></i> -->
+        <i
+          :class="{
+            'el-icon-delete': true,
+            'icon-ban': !selected.type
+          }"
+          @click="keyUpMonitor({ keyCode: 46 })"
+        ></i>
+        <i
+          :class="{
+            'el-icon-scissors': true,
+            'icon-ban': materialTrackList.length === 0 || banClip || videoPlay
+          }"
+          @click="handleMediaClip"
+        ></i>
+      </div>
+      <!-- 本期不实现 -->
+      <!-- <TimeScaleSlider
+        :sliderData="sliderData"
+      ></TimeScaleSlider> -->
+      <!-- <el-alert
+        class="transition-alert"
+        type="warning"
+        close-text="知道了"
+        title="【视频轨道】的添加、删除、移动、剪辑等操作，均会【重置所有转场】"
+        show-icon
+        @close="handleAlertClose"
+      ></el-alert> -->
+      <div class="operations-save">
+        <span v-if="!!editId">保存于{{ videoInfo.modifyTime }}</span>
+        <el-button class="save-my-works" @click="handleSaveOrSubmit(0)">保存至我的作品</el-button>
+        <el-button class="save-clip" @click="handleSaveOrSubmit(1)">提交剪辑</el-button>
+      </div>
+    </el-row>
+    <el-row class="axis-area">
+      <!-- 轨道内容区域 -->
+      <el-col :span="1" class="clip-resource-icons" ref="clipResourceIcons">
+        <!-- 左侧图标区域 -->
+        <div class="empty-icon" ref="emptyIcon"><!-- 用于设置页面样式 --></div>
+        <div
+          v-for="(item, index) in textTrackList"
+          :key="index"
+          @mouseover="handleIconHover(index, '文字', 'text')"
+          @mouseout="isShowUl = false"
+        >
+          <span
+            class="track-type-icon"
+            :style="{
+              color: showUlIndex === index && ulName === 'text' && isShowUl ? '#26cb51' : '#606266'
+            }"
+          > T </span>
+        </div>
+        <i class="el-icon-picture-outline track-type-icon"></i>
+        <i class="el-icon-video-camera track-type-icon"></i>
+        <i class="el-icon-service track-type-icon"></i>
+        <!-- 多轨道设置ul: 提供轨道添加 删除 复制 -->
+        <MultiTracksUl
+          v-show="isShowUl"
+          class="multi-tracks-ul"
+          :index="showUlIndex"
+          :icon-width="iconWidth"
+          :text="ulText"
+          :name="ulName"
+          :style="{
+            top: getUlTop() + 15 + 'px',
+            left: iconWidth + 'px'
+          }"
+          @mouseover.native="isShowUl = true"
+          @mouseout.native="isShowUl = false"
+        ></MultiTracksUl>
+      </el-col>
+      <el-col :span="23" ref="clipResource" class="clip-resource">
+        <!-- 右侧轨道操作区域 -->
+        <Pointer
+          ref="pointer"
+          class="pointer-style"
+          :video-play="videoPlay"
+          :width-range="trackDuration * trackScale"
+          @pause-video="handleVideoPause"
+          @set-pointer-track="setPointerAndTrack"
+          @current-material="judgeVideoSource"
+          @current-picture="judgePictureSource"
+          @current-text="judgeTextSource"
+          @current-transition="judgeTransitionSource"
+        ></Pointer>
+        <el-row class="time-axis" ref="timeAxis">
+          <TimeAxis
+            :material-duration="trackDuration"
+            @move-by-axis="changePointerStart"
+          ></TimeAxis>
+        </el-row>
+        <el-row
+          v-for="(item, index) in textTrackList"
+          :key="'textTrack' + index"
+          :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
+        >
+          <TextTrack
+            ref="textTrack"
+            :track-index="index"
+            :track-list="item"
+            @click-text="handleTrackClick"
+            @mousedown-text="handleTrackMouseDown"
+          ></TextTrack>
+        </el-row>
+        <el-row
+          v-for="(item, index) in pictureTrackList"
+          :key="'pictureTrack' + index"
+          :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
+        >
+          <PictureTrack
+            ref="pictureTrack"
+            :track-list="item"
+            @click-picture="handleTrackClick"
+            @mousedown-picture="handleTrackMouseDown"
+          ></PictureTrack>
+        </el-row>
+        <el-row
+          class="video-track"
+          id="video-track"
+          :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"
+        >
+          <MaterialTrack
+            :video-play="videoPlay"
+            @selected-click="handleSelectedClick"
+            @video-pause="handleVideoPause"
+          ></MaterialTrack>
+          <TransitionTrack
+            ref="transitionTrack"
+            :is-save-or-submit="isSaveOrSubmit"
+          ></TransitionTrack>
+        </el-row>
+        <el-row :style="{ width: timeAxisDuration * trackScale + 500 > 6000 ? timeAxisDuration * trackScale + 500 + 'px' : '6000px' }"></el-row>
+      </el-col>
+    </el-row>
     <!-- 素材推荐弹窗 -->
     <el-dialog
       v-if="isShowMaterialAdd"
@@ -1276,13 +1274,13 @@ export default {
   min-width 1310px
 .main-area
   margin-top 0px !important
-  background #f2f2f2
+  min-height 60%
   .material-area
     margin-top 0px
     height 100%
 .diy-icon-t
   &:hover
-    color #409eff
+    color #26cb51
 .controls-duration
   display inline-block
   position absolute
@@ -1293,8 +1291,6 @@ export default {
 .operations-area
   position relative
   height 40px
-  border-bottom 2px solid #eee
-  background #fff
 .operations-convenient
   display inline-block
   position absolute
@@ -1306,11 +1302,10 @@ export default {
     margin-right 20px
     font-size 20px
 .icon-ban
-  color #ccc
   cursor default
   &:hover,
   &:focus
-    color #ccc
+    color #606266
     cursor default
 .transition-alert
   position absolute
@@ -1330,15 +1325,22 @@ export default {
     vertical-align bottom
 .save-my-works
   margin-left 10px
-  width 140px
+  width 120px
 .save-clip
   margin-left 15px
   width 100px
 .save-my-works, .save-clip
-  font-size 14px
+  height 30px
+  padding 5px
+  font-size 13px
   color #fff
   border 0px
-  background #409eff
+  background #26cb51
+  &:hover,
+  &:focus
+    color #fff
+    border 0px
+    background #18d747
 .axis-area
   height 235px
   overflow hidden
@@ -1350,13 +1352,12 @@ export default {
   width 100%
   height 25px
   position relative
-  background #FFFFFF
 .multi-tracks-ul
   position absolute
   left 4.16667% // 紧贴图标列表
   border-radius 5px
-  box-shadow 1px 1px 5px 1px #aaa
-  background #fff
+  box-shadow 1px 1px 5px 1px #AAAAAA
+  background #FFFFFF
   z-index 6
 .track-type-icon
   display block
@@ -1365,7 +1366,7 @@ export default {
   color #606266
   &:hover,
   &:focus
-    color #409eff
+    color #26cb51
     cursor default
 .el-icon-video-camera
   height 65px
@@ -1431,7 +1432,6 @@ export default {
     margin-top 0px
     margin-bottom 10px
     height 30px
-    background #f2f2f2
   .video-track
     position relative
     height 55px !important
@@ -1439,14 +1439,13 @@ export default {
   margin 0px
   padding 0px 2px
   height 0px
-  background #fff
   .el-tabs__item
     margin 0px 15px
     padding 0px
     font-weight 400
     color #888
   .el-tabs__item.is-active
-    color #409eff !important
+    color #26cb51 !important
   .el-tabs__item.is-top:nth-child(2)
     padding-left 0px
   .el-tabs__item.is-top:last-child
@@ -1463,7 +1462,7 @@ export default {
   overflow inherit
   .el-tab-pane
     position relative
-    margin-top 30px
+    margin-top 50px
     height 90%
 >>>.el-row
   margin 0px
@@ -1473,18 +1472,12 @@ i
   color #606266
   &:hover,
   &:focus
-    color #409eff
+    color #26cb51
 .controls-icons
   >>>.el-image
     width 18px
     height 18px
     cursor pointer
-::-webkit-scrollbar
-  width 5px
-  height 5px
-::-webkit-scrollbar-thumb
-  border-radius 5px
-  background-color #ccc
 .el-dialog__wrapper
   overflow hidden
 .add-material-dialog

@@ -299,7 +299,7 @@ export default {
     border 0px
     background transparent
     overflow hidden
-    caret-color #409eff
+    caret-color #26cb51
 .drr-target-container
   width 100%
   height 100%

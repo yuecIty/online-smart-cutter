@@ -100,7 +100,7 @@
           <el-button class="methods-button" :disabled="isPictureUploading">
             <span v-show="!isPictureUploading">本地上传</span>
             <!-- 贴图上传时的显示动画 -->
-            <Loading v-show="isPictureUploading" color="#409eff" :type="2"></Loading>
+            <Loading v-show="isPictureUploading" color="#26cb51" :type="2"></Loading>
           </el-button>
         </el-upload>
         <span class="message"> *本地上传功能开发中</span>
@@ -601,13 +601,12 @@ export default {
   margin 5px
   width 88px
   height 50px
-  border 2px solid #d7d7d7
+  border 2px solid #888
   border-radius 5px
-  background #d7d7d7
   transition all .3s
   &:hover
-    color #409eff
-    border-color #409eff
+    color #26cb51
+    border-color #26cb51
   .el-image
     width 100%
     height 100%
@@ -651,7 +650,7 @@ export default {
   line-height 35px
   cursor pointer
   &:hover
-    color #409eff
+    color #26cb51
 .horizontal-icon
   transform rotate(90deg)
 .icon-ban
@@ -666,7 +665,6 @@ export default {
   right -200px
   width 200px
   height 140px
-  background #d7d7d7
   border-color #d7d7d7
   z-index 3
   >>>.el-card__body
@@ -699,15 +697,14 @@ export default {
   color #999
   border 1px solid #fff
   border-radius 5px
-  background #fff
   cursor pointer
   transition all .3s
   &:hover
-    border 1px solid #409eff
-    color #409eff
+    border 1px solid #26cb51
+    color #26cb51
 .category-active
-  border 1px solid #409eff
-  color #409eff
+  border 1px solid #26cb51
+  color #26cb51
 .picture-empty
   height 20vh
   line-height 20vh
@@ -719,7 +716,6 @@ export default {
   bottom -3px
   // 避免遮住滚动条
   width 99%
-  background #f2f2f2
 .location-upload
   display inline-block
   margin 10px 3px 3px 3px
@@ -732,31 +728,26 @@ export default {
     font-size 18px
     cursor pointer
     &:hover
-      color #409eff
+      color #26cb51
 .active-picture-list
-  color #409eff
+  color #26cb51
 .methods-button
   width 100px
   height 30px
   line-height 5px
   font-size 13px
   color #888
-  border 1px solid #777
+  border 1px solid #888
+  background #000
   &:focus
-    background #fff
+    background #000
   &:hover
-    color #409eff
-    border-color #409eff
-    background #fff
+    color #26cb51
+    border-color #26cb51
+    background #000
 .message
   font-size 12px
   color #ccc
   cursor default
   vertical-align middle
-::-webkit-scrollbar
-  width 5px
-  height 5px
-::-webkit-scrollbar-thumb
-  border-radius 5px
-  background-color #ccc
 </style>

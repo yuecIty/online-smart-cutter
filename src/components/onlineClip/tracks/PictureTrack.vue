@@ -171,7 +171,7 @@ export default {
   text-overflow ellipsis
   cursor pointer
   &:hover
-    color #409eff
+    color #26cb51
   &:focus
     outline 0px
 .pic-other

@@ -148,7 +148,7 @@
             class="font-style-style"
             :class="item.className"
             :style="{
-              color: getIsActive(item) || overIndex === index ? '#409eff' : '#707070'
+              color: getIsActive(item) || overIndex === index ? '#26cb51' : '#707070'
             }"
             @mouseover="overIndex = index"
             @mouseout="overIndex = null"
@@ -471,13 +471,12 @@ export default {
   width 88px
   height 50px
   vertical-align top
-  border 2px solid #d7d7d7
+  border 2px solid #888
   border-radius 5px
-  background #d7d7d7
   transition all .3s
   &:hover
-    color #409eff
-    border-color #409eff
+    color #26cb51
+    border-color #26cb51
   .el-image
     width 100%
     height 100%
@@ -504,17 +503,16 @@ export default {
   text-align center
   font-size 12px
   color #999
-  border 1px solid #fff
+  border 1px solid #888
   border-radius 5px
-  background #fff
   cursor pointer
   transition all .3s
   &:hover
-    border 1px solid #409eff
-    color #409eff
+    border 1px solid #26cb51
+    color #26cb51
 .category-active
-  border 1px solid #409eff
-  color #409eff
+  border 1px solid #26cb51
+  color #26cb51
 .text-operation
   span
     display inline-block
@@ -551,7 +549,7 @@ export default {
   display inline-block
   margin 0px 10px
   &:hover
-    color #409eff
+    color #26cb51
     cursor pointer
 .enlarge-icon
   font-size 18px
@@ -567,10 +565,4 @@ export default {
     .el-slider__button
       width 10px
       height 10px
-::-webkit-scrollbar
-  width 5px
-  height 5px
-::-webkit-scrollbar-thumb
-  border-radius 5px
-  background-color #ccc
 </style>

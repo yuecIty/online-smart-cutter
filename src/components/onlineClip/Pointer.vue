@@ -211,13 +211,13 @@ pointer-width = 12px
   z-index 3
 .icon-biaoqian3
   font-size 20px
-  color #409eff
+  color #26cb51
 .line
   position absolute
   top 14px
   left 1px
   width 0px
   height 220px
-  border-left 1px solid #409eff
+  border-left 1px solid #26cb51
   z-index 1
 </style>

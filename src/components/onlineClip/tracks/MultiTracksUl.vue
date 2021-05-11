@@ -95,7 +95,7 @@ export default {
     text-align left
   li
     &:hover
-      color #409eff
+      color #26cb51
       cursor pointer
 li::marker
   font-size 0px

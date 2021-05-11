@@ -244,7 +244,7 @@ export default {
         let realTarget = isArray ? target[i] : target
         const iconTarget = document.getElementById('icon' + i)
         if (iconTarget) {
-          iconTarget.style.color = realTarget.typeId !== 7 ? '#409eff' : '#606266'
+          iconTarget.style.color = realTarget.typeId !== 7 ? '#26cb51' : '#606266'
         }
       }
     },
@@ -332,7 +332,7 @@ export default {
 .type-container
   position fixed
   padding 10px
-  border 1px solid #409eff
+  border 1px solid #26cb51
   border-radius 5px
   font-size 13px
   line-height 25px
@@ -355,12 +355,12 @@ export default {
     padding 0px 5px
 .li-style
   &:hover
-    color #409eff
+    color #26cb51
     cursor pointer
   span
     padding-left 10px
 .active-li
-  color #409eff
+  color #26cb51
 .transition-type
   width 20px
   height 20px
@@ -379,7 +379,7 @@ export default {
   background #f5f7fa
   overflow hidden
   &:hover
-    color #409eff
+    color #26cb51
     cursor pointer
 i
   color #606266

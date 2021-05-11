@@ -1158,7 +1158,7 @@ export default {
     cursor pointer
     &:hover,
     &:focus
-      color #409eff
+      color #26cb51
 .avatar-uploader
   display inline-block
   margin-right 10px
@@ -1168,7 +1168,7 @@ export default {
   cursor pointer
   &:hover,
   &:focus
-    border-color #409eff
+    border-color #26cb51
 .horizontal-cover-uploader
   margin-left 90px
 .horizontal-cover-uploader, .horizontal-cover, .horizontal-cover-icon
@@ -1183,7 +1183,7 @@ export default {
   color #333
   &:hover,
   &:focus
-    color #409eff
+    color #26cb51
 .pic-style
   display inline-block
   margin-bottom 0px

@@ -85,8 +85,8 @@ export default {
 
       canvas.width = this.axisWidth
       canvas.height = this.height
-      ctx.strokeStyle = '#666'
-      ctx.fillStyle = '#666'
+      ctx.strokeStyle = '#999'
+      ctx.fillStyle = '#999'
       ctx.font = '12px Source Han Sans CN'
       ctx.lineWidth = 0.2
       ctx.beginPath()
@@ -136,6 +136,5 @@ export default {
   // position fixed
   // z-index 2
   height 25px
-  background #FFFFFF
-  border-bottom 1px solid #ccc
+  border-bottom 1px solid #888
 </style>
