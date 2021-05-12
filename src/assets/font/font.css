@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'Black';
+  src: url('~@/assets/font/NotoSansHans-Black.otf');
+}
+
+@font-face {
+  font-family: 'Bold';
+  src: url('~@/assets/font/NotoSansHans-Bold.otf');
+}
+
+@font-face {
+  font-family: 'DemiLight';
+  src: url('~@/assets/font/NotoSansHans-DemiLight.otf');
+}
+
+@font-face {
+  font-family: 'Light';
+  src: url('~@/assets/font/NotoSansHans-Light.otf');
+}
+
+@font-face {
+  font-family: 'Medium';
+  src: url('~@/assets/font/NotoSansHans-Medium.otf');
+}
+
+@font-face {
+  font-family: 'Regular';
+  src: url('~@/assets/font/NotoSansHans-Regular.otf');
+}
+
+@font-face {
+  font-family: 'Thin_Windows';
+  src: url('~@/assets/font/NotoSansHans-Thin-Windows.otf');
+}
