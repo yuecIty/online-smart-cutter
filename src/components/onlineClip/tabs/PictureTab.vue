@@ -665,6 +665,7 @@ export default {
   right -200px
   width 200px
   height 140px
+  background #000000
   border-color #d7d7d7
   z-index 3
   >>>.el-card__body
