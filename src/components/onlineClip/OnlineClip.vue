@@ -1364,10 +1364,6 @@ export default {
   height 40px
   line-height 40px
   color #606266
-  &:hover,
-  &:focus
-    color #26CB51
-    cursor default
 .el-icon-video-camera
   height 65px
   line-height 65px
@@ -1451,8 +1447,6 @@ export default {
     &:hover,
     &:focus
       color #26CB51
-  .el-tabs__item.is-active
-    color #26CB51 !important
   .el-tabs__item.is-top:nth-child(2)
     padding-left 0px
   .el-tabs__item.is-top:last-child
@@ -1479,12 +1473,6 @@ export default {
 >>>.el-row
   margin 0px
   margin-top 10px
-i
-  cursor pointer
-  color inherit
-  &:hover,
-  &:focus
-    color #26CB51
 .controls-icons
   >>>.el-image
     width 18px

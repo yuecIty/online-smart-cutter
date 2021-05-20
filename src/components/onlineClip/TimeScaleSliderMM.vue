@@ -83,9 +83,6 @@ i
   font-size 20px
   color #ccc
   cursor pointer
-  &:hover,
-  &:focus
-    color #26CB51
 >>> .el-progress
   display inline-block
   vertical-align top

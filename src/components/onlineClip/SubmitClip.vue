@@ -1177,9 +1177,6 @@ export default {
   line-height 114px
   font-size 28px
   color #333
-  &:hover,
-  &:focus
-    color #26CB51
 .pic-style
   display inline-block
   margin-bottom 0px

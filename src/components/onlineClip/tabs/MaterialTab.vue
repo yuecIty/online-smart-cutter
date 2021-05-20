@@ -475,7 +475,7 @@ export default {
   cursor pointer
   &:hover,
   &:focus
-    color red
+    color red !important
 .material-duration
   position absolute
   top 80px

@@ -493,26 +493,6 @@ export default {
   width 100%
   height 50px
   line-height 50px
-.category-style
-  display inline-block
-  margin 3px
-  padding 0px 10px
-  max-width 80px
-  height 25px
-  line-height 25px
-  text-align center
-  font-size 12px
-  color #999
-  border 1px solid #888
-  border-radius 5px
-  cursor pointer
-  transition all .3s
-  &:hover
-    border 1px solid #26CB51
-    color #26CB51
-.category-active
-  border 1px solid #26CB51
-  color #26CB51
 .text-operation
   span
     display inline-block
@@ -548,9 +528,6 @@ export default {
 .font-style-style
   display inline-block
   margin 0px 10px
-  &:hover
-    color #26CB51
-    cursor pointer
 .enlarge-icon
   font-size 18px
 .operation-area

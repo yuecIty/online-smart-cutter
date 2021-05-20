@@ -1,22 +1,66 @@
-html, body, #app, .online-clip
-  height 100%
-body
-  margin 0
-  background #000000
-  overflow-x hidden
-.el-loading-spinner
-  .path
-    stroke #26CB51
-  .el-loading-text
-    color #26CB51
-.message
-  font-size 12px
-  vertical-align bottom
-  color #888888
-  cursor default
+// 滚动条样式
 ::-webkit-scrollbar
   width 4px
   height 4px
 ::-webkit-scrollbar-thumb
   border-radius 5px
   background-color #4d4c4c
+
+// 标签样式
+html, body, #app, .online-clip
+  height 100%
+body
+  margin 0
+  background #000000
+  overflow-x hidden
+  color #888888
+i
+  cursor default
+  color inherit
+  &:hover,
+  &:focus
+    color #26CB51 !important
+
+// DRR样式
+.z-drr-container
+  .z-rotateable-handle,
+  .z-rotateable-handle:after
+    background-color #26CB51
+  [class*=z],
+  [class*=z]:after
+    border-color #26CB51
+
+// elementui样式
+.el-loading-spinner
+  .path
+    stroke #26CB51
+  .el-loading-text
+    color #26CB51
+
+// 自定义类样式
+.message
+  font-size 12px
+  vertical-align bottom
+  color #888888
+  cursor default
+.category-style
+  display inline-block
+  margin 3px
+  padding 0px 10px
+  max-width 80px
+  height 25px
+  line-height 25px
+  text-align center
+  font-size 12px
+  color #999
+  border 1px solid #888
+  border-radius 5px
+  cursor pointer
+  transition all .3s
+  &:hover
+    border 1px solid #26CB51
+    color #26CB51
+.category-active
+  border 1px solid #26CB51
+  color #26CB51
+

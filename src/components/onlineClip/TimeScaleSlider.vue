@@ -94,9 +94,6 @@ i
   font-size 20px
   color #ccc
   cursor pointer
-  &:hover,
-  &:focus
-    color #26CB51
 >>>.el-slider__bar
   height 4px
 >>>.el-slider__button-wrapper

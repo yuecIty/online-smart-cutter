@@ -649,8 +649,6 @@ export default {
   font-size 23px
   line-height 35px
   cursor pointer
-  &:hover
-    color #26CB51
 .horizontal-icon
   transform rotate(90deg)
 .icon-ban
@@ -686,26 +684,6 @@ export default {
   overflow hidden
 .category-container
   margin-bottom 0px
-.category-style
-  display inline-block
-  margin 3px
-  padding 0px 5px
-  max-width 80px
-  height 25px
-  line-height 25px
-  text-align center
-  font-size 12px
-  color #999
-  border 1px solid #fff
-  border-radius 5px
-  cursor pointer
-  transition all .3s
-  &:hover
-    border 1px solid #26CB51
-    color #26CB51
-.category-active
-  border 1px solid #26CB51
-  color #26CB51
 .picture-empty
   height 20vh
   line-height 20vh
@@ -728,8 +706,6 @@ export default {
     margin-right 10px
     font-size 18px
     cursor pointer
-    &:hover
-      color #26CB51
 .active-picture-list
   color #26CB51
 .methods-button
