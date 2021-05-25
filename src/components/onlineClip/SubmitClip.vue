@@ -1189,7 +1189,6 @@ export default {
 .submit-dialog
   >>>.el-dialog
     margin-top 5vh !important
-    // height 90vh
     border-radius 10px
     .el-dialog__body
       padding 30px 10px
@@ -1220,5 +1219,9 @@ export default {
 .submit-button-group
   >>>.el-button
     margin-left 15px
-    width 80px
+    min-width 80px
+>>>.el-button
+  font-size 13px
+>>>.el-radio-button__inner
+  font-size 13px
 </style>
