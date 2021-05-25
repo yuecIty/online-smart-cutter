@@ -225,9 +225,9 @@ export default {
         // }
       ],
       textList: [
-        { wordSpacing: 0, borderW: false, bold: true, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 64, page: 1, text: '标题', alignment: 'center', fontColor: '#ffffff', frame: false },
-        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 50, page: 1, text: '副标题', alignment: 'center', fontColor: '#ffffff', frame: false },
-        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'cursive', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 24, page: 1, text: '字幕', alignment: 'center', fontColor: '#ffffff', frame: false }
+        { wordSpacing: 0, borderW: false, bold: true, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 64, page: 1, text: '标题', alignment: 'center', fontColor: '#FFFFFF', frame: false },
+        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'sans-serif', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 50, page: 1, text: '副标题', alignment: 'center', fontColor: '#FFFFFF', frame: false },
+        { wordSpacing: 0, borderW: false, bold: false, rows: 10, italic: false, lineSpacing: 1, fontFile: 'cursive', whirl: 0, shadowY: false, transparency: '1', underLine: false, fontSize: 24, page: 1, text: '字幕', alignment: 'center', fontColor: '#FFFFFF', frame: false }
       ],
       fontStyleList: [ // 字体样式所需的对应操作数据
         {
@@ -515,7 +515,7 @@ export default {
   width 130px
   >>>.el-input-group__append
     padding 0px
-    vertical-align bottom
+    vertical-align baseline
 .color-picker
   >>>.el-color-picker__trigger
     padding 0px

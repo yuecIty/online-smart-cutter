@@ -119,14 +119,14 @@
         <i
           :class="{
             'el-icon-delete': true,
-            'icon-ban': !selected.type
+            'custom-i-hover': !selected.type
           }"
           @click="keyUpMonitor({ keyCode: 46 })"
         ></i>
         <i
           :class="{
             'el-icon-scissors': true,
-            'icon-ban': materialTrackList.length === 0 || banClip || videoPlay
+            'custom-i-hover': materialTrackList.length === 0 || banClip || videoPlay
           }"
           @click="handleMediaClip"
         ></i>
@@ -1300,12 +1300,10 @@ export default {
     color #606266
     margin-right 20px
     font-size 20px
-.icon-ban
-  cursor default
+.custom-i-hover
   &:hover,
   &:focus
     color #606266
-    cursor default
 .transition-alert
   position absolute
   left 100px
@@ -1444,6 +1442,7 @@ export default {
     padding 0px
     font-weight 400
     color #888
+    &.is-active,
     &:hover,
     &:focus
       color #26CB51
