@@ -8,7 +8,7 @@
     class="online-clip"
   >
     <el-row class="main-area">
-      <el-col :span="15" class="material-cols" ref="tabsCol">
+      <el-col :span="15" id="materialArea" class="material-cols" ref="tabsCol">
         <!-- tabs素材区域 -->
         <el-row class="material-area">
           <el-tabs v-model="onlineTab" class="online-clip-tabs">
@@ -17,6 +17,7 @@
               <MaterialTab
                 v-if="onlineTab === 'materialTab'"
                 ref="materialTab"
+                id="materialItem"
                 @update-date="updateData"
                 @video-data="handleVideoDataSet"
                 @video-cover="drawCanvasVideoCover"
@@ -60,8 +61,17 @@
         </el-row>
       </el-col>
       <el-col :span="9" class="video-cols" ref="videoCols">
+        <!-- 右上角信息图标区域 -->
+        <div class="info-icon-area">
+          <el-tooltip content="* 视频长度以视频轨道长度为准。" placement="bottom">
+            <i class="el-icon-info"></i>
+          </el-tooltip>
+          <el-tooltip content="点击显示引导" placement="bottom">
+            <i class="el-icon-place" @click="startGuider"></i>
+          </el-tooltip>
+        </div>
         <!-- 播放及drr操作区域 -->
-        <div v-loading="isLoadingVideo" class="video-frame" ref="videoFrame">
+        <div v-loading="isLoadingVideo" id="videoArea" class="video-frame" ref="videoFrame">
           <video id="video" ref="video" preload="auto" crossOrigin="*" style="display: none" :src="videoSrc"></video>
           <!-- <video
             ref="videoTransition"
@@ -111,12 +121,13 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class="operations-area">
+    <el-row id="buttonArea" class="operations-area">
       <div class="operations-convenient">
         <!-- 本期不实现 -->
         <!-- <i class="el-icon-back"></i>
         <i class="el-icon-right"></i> -->
         <i
+          id="deleteIcon"
           :class="{
             'el-icon-delete': true,
             'custom-i-hover': !selected.type
@@ -124,6 +135,7 @@
           @click="keyUpMonitor({ keyCode: 46 })"
         ></i>
         <i
+          id="clipIcon"
           :class="{
             'el-icon-scissors': true,
             'custom-i-hover': materialTrackList.length === 0 || banClip || videoPlay
@@ -143,28 +155,30 @@
         show-icon
         @close="handleAlertClose"
       ></el-alert> -->
-      <div class="operations-save">
+      <div id="submitButton" class="operations-save">
         <el-button class="save-my-works" @click="handleSaveOrSubmit(0)">保存至我的作品</el-button>
         <el-button class="save-clip" @click="handleSaveOrSubmit(1)">提交剪辑</el-button>
       </div>
     </el-row>
-    <el-row class="axis-area">
+    <el-row id="tracksArea" class="axis-area">
       <!-- 轨道内容区域 -->
       <el-col :span="1" class="clip-resource-icons" ref="clipResourceIcons">
         <!-- 左侧图标区域 -->
         <div class="empty-icon" ref="emptyIcon"><!-- 用于设置页面样式 --></div>
-        <div
-          v-for="(item, index) in textTrackList"
-          :key="index"
-          @mouseover="handleIconHover(index, '文字', 'text')"
-          @mouseout="isShowUl = false"
-        >
-          <span
-            class="track-type-icon"
-            :style="{
-              color: showUlIndex === index && ulName === 'text' && isShowUl ? '#26CB51' : '#606266'
-            }"
-          > T </span>
+        <div id="multiTracksItem">
+          <div
+            v-for="(item, index) in textTrackList"
+            :key="index"
+            @mouseover="handleIconHover(index, '文字', 'text')"
+            @mouseout="isShowUl = false"
+          >
+            <span
+              class="track-type-icon"
+              :style="{
+                color: showUlIndex === index && ulName === 'text' && isShowUl ? '#26CB51' : '#606266'
+              }"
+            > T </span>
+          </div>
         </div>
         <i class="el-icon-picture-outline track-type-icon"></i>
         <i class="el-icon-video-camera track-type-icon"></i>
@@ -293,6 +307,7 @@ import PictureDrr from './drrContainers/PictureDrr'
 import TextDrr from './drrContainers/TextDrr'
 import { formatDuration } from '@/components/onlineClip/global/functions'
 import { mapState } from 'vuex'
+import steps from './guide'
 export default {
   components: {
     TimeAxis,
@@ -1213,6 +1228,11 @@ export default {
         //   ctx.drawImage(videoTransition, 0, 0, canvasVideo.width, canvasVideo.height)
         // }
       }, 40)
+    },
+    startGuider () {
+      // 打开引导
+      this.$driver.defineSteps(steps)
+      this.$driver.start()
     }
   },
   created () {
@@ -1223,7 +1243,6 @@ export default {
       { rlsId: '', editId: '', seq: '', status: 1, id: 319184, coocaaMId: '6uh9j6l00401', coocaaVId: 'r9mtl000001', thirdMovieId: 'o0032tld91n', thirdVideoId: 'm441e3rjq8kwpsc', duration: 315, frameDuration: 315, formattedDuration: '00:05:15', videoTitle: 'JX3', playUrl: require('@/assets/video/JX3.mp4'), cover: require('@/assets/material1004.png'), modifyTime: '2020-12-19 04:53:07', source: 'tencent', businessType: 0, businessName: '影视', categoryId: 2, categoryName: '动漫', startFrame: 0, endFrame: 315, startTime: 0, endTime: 315 }
     ]
     this.$store.commit('updateArrayRevalue', { name: 'materialTabList', value: list })
-    console.log('online----------list')
   },
   mounted () {
     window.addEventListener('keyup', this.keyUpMonitor)
@@ -1243,8 +1262,10 @@ export default {
       this.videoTarget.addEventListener('play', this.drawCanvasVideo)
       this.videoTarget.addEventListener('pause', this.stopCanvasVideo)
       setTimeout(() => {
-        this.isClipLoading = false
         // 关闭加载动画
+        this.isClipLoading = false
+        // 打开引导
+        this.startGuider()
       }, 500)
     })
   },
@@ -1382,6 +1403,13 @@ export default {
   padding 0px !important
   height 55vh
   text-align center
+.info-icon-area
+  position absolute
+  top 20px
+  right 0px
+  i
+    margin-right 10px
+    font-size 18px
 .video-frame
   position relative
   top 15%

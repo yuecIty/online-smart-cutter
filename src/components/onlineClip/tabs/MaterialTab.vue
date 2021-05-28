@@ -29,7 +29,6 @@
             :style="{
               display: mouseTarget === index ? 'block' : 'none'
             }"
-            title="删除"
             @click="handleMaterialDelete(index)"
           ></i>
           <i
@@ -37,7 +36,6 @@
               display: mouseTarget === index ? 'block' : 'none'
             }"
             class="el-icon-circle-plus-outline material-add"
-            title="添加"
             @click="handleIconAdd(material, index)"
           ></i>
           <div class="material-duration">
@@ -400,7 +398,6 @@ export default {
         video.setAttribute('crossOrigin', '*')
         video.src = list[i].playUrl
         video.currentTime = 1
-        console.log('canvas------cover')
         video.oncanplay = () => {
           // 异步 需判断结果与请求是否对应
           if (!list[i]) {
