@@ -372,42 +372,59 @@ const mutations = {
     } else {
       state.dragWidth = item.realRange ? item.realRange : item.duration * state.trackScale
     }
-
-    state.mouseElement.style = 'position: fixed; top: 0px; left: 0px; z-index: 9999; pointer-events: none; background-size: auto 100%; border-radius: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'
-    state.mouseElement.style.width = state.dragWidth + 'px'
-    state.mouseElement.style.transform = 'translate(' + positionRect.left + 'px,' + positionRect.top + 'px)'
+    let mouseElementStyle = `
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      z-index: 9999;
+      pointer-events: none;
+      background-size: auto 100%;
+      border-radius: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: ${state.dragWidth}px;
+      transform: translate(${positionRect.left}px, ${positionRect.top}px);
+    `
     if (state.prefix === 'picture') {
-      state.mouseElement.style.height = state.defaultPicHeight + 'px'
-      state.mouseElement.style.backgroundImage = 'url(' + item.picUrl + ')'
-      state.mouseElement.style.backgroundColor = '#000000'
+      mouseElementStyle += `
+        height: ${state.defaultPicHeight}px;
+        background-image: url(${item.picUrl});
+        background-color: #000000;
+      `
     }
     if (state.prefix === 'text') {
+      mouseElementStyle += `
+        font-size: 13px;
+        height: ${state.defaultTextHeight}px;
+        line-height: ${state.defaultTextHeight}px;
+        background-color: #F2F2F2;
+        text-align: center;
+        box-shadow: inset 0px 0px 2px 1px #26CB51;
+        color: #333333;
+      `
       state.mouseElement.innerText = item.text
-      state.mouseElement.style.fontSize = '13px'
-      state.mouseElement.style.height = state.defaultTextHeight + 'px'
-      state.mouseElement.style.lineHeight = state.defaultTextHeight + 'px'
-      state.mouseElement.style.backgroundColor = '#F2F2F2'
-      state.mouseElement.style.textAlign = 'center'
-      state.mouseElement.style.boxShadow = 'inset 0px 0px 2px 1px #26CB51'
-      state.mouseElement.style.color = '#333333'
     }
+    state.mouseElement.style = mouseElementStyle
     // 添加元素到DOM
     document.body.appendChild(state.mouseElement)
   },
   tabDragging(state, e) {
     e.preventDefault()
     // 获取拖拽移动方向及当前鼠标位置
-    state.direction = e.clientX - state.dragTranslateX
-    state.dragTranslateX = e.clientX
+    const clientX = e.clientX
+    state.direction = clientX - state.dragTranslateX
+    state.dragTranslateX = clientX
     // 在dropZone外拖拽时 元素位置即鼠标位置
     if (!state.isDropZone) {
-      state.mouseElement.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)'
+      state.mouseElement.style.transform = 'translate(' + clientX + 'px,' + e.clientY + 'px)'
     }
   },
   trackDragging(state, e) {
     // 获取拖拽移动方向及当前鼠标位置
-    state.direction = e.clientX - state.dragTranslateX
-    state.dragTranslateX = e.clientX
+    const clientX = e.clientX
+    state.direction = clientX - state.dragTranslateX
+    state.dragTranslateX = clientX
     // 隐藏轨道上的拖拽目标
     state.originalElement.style.visibility = 'hidden'
   },
@@ -790,18 +807,25 @@ const mutations = {
         // 只是移动 其他样式无需改变
         targetElement.style.transform = 'translateX(' + targetPicture.positionXBegin + 'px)'
       } else {
-        targetElement.style.width = targetPicture.realRange + 'px'
-        targetElement.style.backgroundSize = 'auto 100%'
-        targetElement.style.transform = 'translateX(' + targetPicture.positionXBegin + 'px)'
+        let targetElementStyle = `
+          width: ${targetPicture.realRange}px;
+          background-size: auto 100%;
+          transform: translateX(${targetPicture.positionXBegin}px);
+        `
         if (state.prefix === 'picture') {
-          targetElement.style.height = state.defaultPicHeight + 'px'
-          targetElement.style.backgroundImage = 'url(' + targetPicture.picUrl + ')'
-          targetElement.style.backgroundColor = '#000'
+          targetElementStyle += `
+            height: ${state.defaultPicHeight}px;
+            background-image: url(${targetPicture.picUrl});
+            background-color: #000000;
+          `
         }
         if (state.prefix === 'text') {
-          targetElement.style.background = '#f2f2f2'
-          targetElement.style.height = state.defaultTextHeight + 'px'
+          targetElementStyle += `
+            background: #F2F2F2;
+            height: ${state.defaultTextHeight}px;
+          `
         }
+        targetElement.style = targetElementStyle
       }
     }
   },
