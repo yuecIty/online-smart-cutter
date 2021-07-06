@@ -273,10 +273,6 @@
       :modal-append-to-body="true"
     >
       <TempMessage></TempMessage>
-      <!-- 关闭接口 -->
-      <!-- <MaterialRecommendation
-        :is-online-clip="true"
-      ></MaterialRecommendation> -->
     </el-dialog>
     <!-- 保存/提交剪辑弹窗 -->
     <SubmitClip
@@ -658,7 +654,12 @@ export default {
       for (let i = index; i < this.materialTrackList.length - 1; i++) {
         let before = document.getElementById('clip' + (i + 1))
         let after = document.getElementById('clip' + i)
-        this.updateStyle(before, after)
+        after.style = `
+          width: ${before.style.width};
+          height: ${before.style.height};
+          background-image: ${before.style.backgroundImage};
+          background-size: auto 100%
+        `
         this.$store.commit('updateMateriaTime', { duration: moveDuration, index: i + 1, operator: 0 })
       }
 
@@ -827,7 +828,6 @@ export default {
 
       // 设置新轨道块1的样式
       clipOne.style.width = this.realLeft + 'px'
-      clipOne.style.backgroundSize = 'auto 100%'
 
       // 在数据更新后进行绘制
       this.$nextTick(() => {
@@ -835,15 +835,22 @@ export default {
           // 因为数据改变的关系 后半部分会重新渲染 所以需要重新绘制
           let before = document.getElementById('clip' + (i - 1))
           let after = document.getElementById('clip' + i)
-          this.updateStyle(before, after)
+          after.style = `
+            width: ${before.style.width};
+            height: ${before.style.height};
+            background-image: ${before.style.backgroundImage};
+            background-size: auto 100%
+          `
         }
 
         // 单独设置新轨道块2的样式
         let clipTwo = document.getElementById('clip' + (index + 1))
-        clipTwo.style.width = this.selected.width - this.realLeft + 'px'
-        clipTwo.style.height = this.defaultMaterialHeight + 'px'
-        clipTwo.style.backgroundImage = this.selected.dataURL
-        clipTwo.style.backgroundSize = 'auto 100%'
+        clipTwo.style = `
+          width: ${this.selected.width - this.realLeft}px;
+          height: ${this.defaultMaterialHeight}px;
+          background-image: ${this.selected.dataURL};
+          background-size: auto 100%;
+        `
 
         // 更新转场
         // this.$store.commit('updateValue', { name: 'operationName', value: 'clip' })
@@ -981,12 +988,6 @@ export default {
       // 获得数组反转后原index对应的现index
       return length - 1 + index + index * (-2)
     },
-    updateStyle (before, after) {
-      after.style.width = before.style.width
-      after.style.height = before.style.height
-      after.style.backgroundImage = before.style.backgroundImage
-      after.style.backgroundSize = 'auto 100%'
-    },
     updateData (duration, isplaying) {
       // 更新指针相关数据
       let realDuration = duration
@@ -1010,11 +1011,14 @@ export default {
         for (let i = 0; i < count; i++) {
           let target = document.querySelector('#clip' + i)
           let trackDuration = list[i].trackEndTime - list[i].trackStartTime
-          target.style.width = trackDuration * this.trackScale + 'px'
-          target.style.height = this.defaultMaterialHeight + 'px'
-          target.style.left = list[i].trackStartTime * this.trackScale + 'px'
-          target.style.backgroundImage = 'url(' + list[i].cover + ')'
-          target.style.backgroundSize = 'auto 100%'
+          // 初始化样式：宽高 位置 背景图
+          target.style = `
+            width: ${trackDuration * this.trackScale}px;
+            height: ${this.defaultMaterialHeight}px;
+            left: ${list[i].trackStartTime * this.trackScale}px;
+            background-image: url(${list[i].cover});
+            background-size: auto 100%;
+          `
         }
 
         this.videoSrc = list[0].playUrl
@@ -1190,10 +1194,10 @@ export default {
         return false
       }
       // 更新一些需要保持相对静止元素的样式
-      this.$refs.timeAxis.$el.style.top = top + 'px'
-      this.$refs.emptyIcon.style.top = top + 'px'
-      this.$refs.pointer.handlePointerYStatic(e.target.scrollTop)
-      this.$refs.clipResourceIcons.$el.style.top = -top + 'px'
+      this.$refs.timeAxis.$el.style.transform = `translateY(${top}px)`
+      this.$refs.emptyIcon.style.transform = `translateY(${top}px)`
+      this.$refs.clipResourceIcons.$el.style.transform = `translateY(-${top}px)`
+      this.$refs.pointer.handlePointerYStatic(top)
     },
     stopCanvasVideo () {
       clearInterval(this.canvasTimer)
@@ -1370,7 +1374,7 @@ export default {
 .empty-icon
   width 100%
   height 25px
-  position relative
+  background #000000
 .multi-tracks-ul
   position absolute
   left 4.16667% // 紧贴图标列表

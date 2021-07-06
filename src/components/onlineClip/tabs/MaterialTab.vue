@@ -224,7 +224,12 @@ export default {
           let before = document.getElementById('clip' + (i - 1))
           let after = document.getElementById('clip' + i)
           // 更新显示样式
-          this.updateStyle(before, after)
+          after.style = `
+            width: ${before.style.width};
+            height: ${before.style.height};
+            background-image: ${before.style.backgroundImage};
+            background-size: auto 100%;
+          `
           // 更新数据
           this.$store.commit('updateMateriaTime', { duration: duration, index: i, operator: 1 })
         }
@@ -232,10 +237,12 @@ export default {
       }
 
       // 设置添加的轨道块样式
-      target.style.width = duration * this.trackScale + 'px'
-      target.style.height = this.defaultMaterialHeight + 'px'
-      target.style.backgroundImage = 'url(' + material.cover + ')'
-      target.style.backgroundSize = 'auto 100%'
+      target.style = `
+        width: ${duration * this.trackScale}px;
+        height: ${this.defaultMaterialHeight}px;
+        background-image: url(${material.cover});
+        background-size: auto 100%;
+      `
       // 设置添加的轨道块数据
       const time = targetIndex ? materialTrackList[targetIndex - 1].trackEndTime : 0
       const value = {
@@ -332,12 +339,6 @@ export default {
           this.$store.commit('updateValue', { name: name, value: false })
         }
       }
-    },
-    updateStyle (before, after) {
-      after.style.width = before.style.width
-      after.style.height = before.style.height
-      after.style.backgroundImage = before.style.backgroundImage
-      after.style.backgroundSize = 'auto 100%'
     },
     judgeTrackDuration (endTime) {
       // 更新trackDuration及相关时长数据

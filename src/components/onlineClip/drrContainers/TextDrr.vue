@@ -234,19 +234,21 @@ export default {
       // 编辑的文本与显示文本同步
       this.editText = item.text
       // 编辑文本样式与显示文本样式同步
-      const inputStyle = this.$refs.drrInput.style
-      const style = this.$refs.input.$el.firstChild.style
-      inputStyle.width = item.width + 'px'
-      inputStyle.height = item.height + 'px'
-      inputStyle.transform = 'translate(' + item.nowXAxis + 'px, ' + item.nowYAxis + 'px)'
-      style.width = item.width + 'px'
-      style.height = item.height + 'px'
-      style.fontSize = item.fontSize + 'px'
-      style.fontFamily = item.fontFile
-      style.color = item.fontColor
-      style.letterSpacing = item.wordSpacing + 'px'
-      style.lineHeight = item.lineSpacing
-      style.opacity = item.transpancy
+      this.$refs.drrInput.style = `
+        width: ${item.width}px;
+        heigth: ${item.height}px;
+        transform: translate(${item.nowXAxis}px, ${item.nowYAxis}px)
+      `
+      this.$refs.input.$el.firstChild.style = `
+        width: ${item.width}px;
+        height: ${item.height}px;
+        font-size: ${item.fontSize}px;
+        font-family: ${item.fontFile};
+        color: ${item.fontColor};
+        letter-spacing: ${item.wordSpacing}px;
+        line-height: ${item.lineSpacing};
+        opacity: ${item.transpancy};
+      `
       setTimeout(() => {
         // 需等待一会 保证input加载完毕 已有focus事件
         this.$refs.input.focus()

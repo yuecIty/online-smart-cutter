@@ -92,7 +92,7 @@ export default {
           // 累计选择块移动距离
           moveWidth += before.offsetWidth
           // 更新显示样式
-          this.updateStyle(before, after)
+          this.updateStyle(after, before.style.width, before.style.height, before.style.backgroundImage)
           // 更新数据
           this.$store.commit('updateMateriaTime', { duration: moveTrackDuration, index: i, operator: 0 })
         }
@@ -108,7 +108,7 @@ export default {
           // 累计选择块移动距离
           moveWidth += before2.offsetWidth
           // 更新显示样式
-          this.updateStyle(before2, after2)
+          this.updateStyle(after2, before2.style.width, before2.style.height, before2.style.backgroundImage)
           // 更新数据
           this.$store.commit('updateMateriaTime', { duration: moveTrackDuration, index: j, operator: 1 })
         }
@@ -117,10 +117,7 @@ export default {
         this.$store.commit('updateMateriaTime', { duration: tempWidth, index: targetIndex, operator: 0 })
       }
       // 更新选择块显示样式
-      target.style.width = temp.width
-      target.style.height = temp.height
-      target.style.backgroundImage = temp.backgroundImage
-      target.style.backgroundSize = 'auto 100%'
+      this.updateStyle(target, temp.width, temp.height, temp.backgroundImage)
       // 更新转场
       this.$store.commit('updateValue', { name: 'operationName', value: 'sort' })
       // this.$store.commit('updateValue', { name: 'operationIndex', value: originalIndex })
@@ -128,11 +125,13 @@ export default {
       // 更新选择块数据
       this.$emit('selected-click', target, targetIndex, 'materialTrackList')
     },
-    updateStyle (before, after) {
-      after.style.width = before.style.width
-      after.style.height = before.style.height
-      after.style.backgroundImage = before.style.backgroundImage
-      after.style.backgroundSize = 'auto 100%'
+    updateStyle (target, width, height, backgroundImage) {
+      target.style = `
+        width: ${width};
+        height: ${height};
+        background-image: ${backgroundImage};
+        background-size: auto 100%;
+      `
     },
     getDurationByWidth (width) {
       // 获取时长 - 根据所设置的宽度与时长比例计算

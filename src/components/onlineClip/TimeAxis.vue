@@ -132,6 +132,7 @@ export default {
 .canvas-container
   width 100%
   height 30px
+  background #000000
 .time-canvas
   // position fixed
   // z-index 2
