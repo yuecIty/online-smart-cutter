@@ -54,7 +54,7 @@ export default {
           if (left < 0) left = 0
           if (left > widthRange) left = widthRange - 1
           vnode.context.translateX = left
-          pointer.style.transform = `translate(${vnode.context.translateX}px, ${vnode.context.translateY}px)`
+          pointer.style.transform = `translate3d(${vnode.context.translateX}px, ${vnode.context.translateY}px, 0px)`
           // 获得playing-
           vnode.context.judgePlayingTarget()
           // 传递指针新位移
@@ -135,13 +135,13 @@ export default {
     handlePointerYStatic (top) {
       // 指针随滚动条滚动移动 保持相对静止
       this.translateY = top + 11
-      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
+      this.pointer.style.transform = `translate3d(${this.translateX}px, ${this.translateY}px, 0px)`
     },
     moveWhenVideoPlay (duration) {
       // 通过duration 更新指针位移
       const left = duration * this.trackScale
       this.translateX = left
-      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
+      this.pointer.style.transform = `translate3d(${this.translateX}px, ${this.translateY}px, 0px)`
     },
     judgePlayingTarget () {
       // 获取所有的playing-
@@ -194,7 +194,7 @@ export default {
       if (left > this.widthRange) left = this.widthRange
       // 减去指针宽度
       this.translateX = left - 1
-      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
+      this.pointer.style.transform = `translate3d(${this.translateX}px, ${this.translateY}px, 0px)`
     }
   },
   mounted () {
@@ -206,7 +206,7 @@ export default {
 pointer-width = 12px
 .pointer
   position absolute
-  transform translateY(11px)
+  transform translate3d(0px, 11px, 0px)
   z-index 3
 .head
   position absolute
