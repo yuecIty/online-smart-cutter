@@ -156,8 +156,7 @@
         @close="handleAlertClose"
       ></el-alert> -->
       <div id="submitButton" class="operations-save">
-        <el-button class="save-my-works" @click="handleSaveOrSubmit(0)">保存至我的作品</el-button>
-        <el-button class="save-clip" @click="handleSaveOrSubmit(1)">提交剪辑</el-button>
+        <el-button class="save-clip" @click="handleSaveOrSubmit()">保存剪辑</el-button>
       </div>
     </el-row>
     <el-row id="tracksArea" class="axis-area">
@@ -278,8 +277,6 @@
     <SubmitClip
       v-if="isSaveOrSubmit"
       :is-save-or-submit="isSaveOrSubmit"
-      :save-or-submit="saveOrSubmit"
-      :form-info="videoInfo"
       :video-frame="videoFrame"
       @submit-close="handleSubmitClose"
       @all-close="handleAllClose"
@@ -364,7 +361,6 @@ export default {
       realLeft: 0,
       isInputting: false,
       isSaveOrSubmit: false,
-      saveOrSubmit: 0,
       titleHeight: 70,
       canvasWidth: 100,
       canvasVideo: null,
@@ -600,7 +596,7 @@ export default {
         message: '消息可在左上角 <i class="el-icon-question"></i> 中重新查看哦'
       })
     },
-    handleSaveOrSubmit (way) { // way: 0 保存 1 提交剪辑
+    handleSaveOrSubmit () {
       // 保存/提交剪辑弹窗
       if (this.videoPlay) {
         // 若视频播放中 需暂停
@@ -608,11 +604,10 @@ export default {
       }
       if (this.materialTrackList.length) {
         this.isSaveOrSubmit = true
-        this.saveOrSubmit = way
       } else {
         this.$message({
           type: 'warning',
-          message: '轨道无素材, 请选取素材进行操作再保存或提交'
+          message: '轨道无素材, 请选取素材进行操作后再保存'
         })
       }
     },
@@ -709,8 +704,6 @@ export default {
     handleAllClose () {
       // 已成功保存/提交剪辑
       this.isSaveOrSubmit = false
-      this.$store.commit('clearAll')
-      this.$emit('save-close-refresh', this.saveOrSubmit)
     },
     handleTrackMouseDown (e, index, trackIndex, name, isNeedTab) { // isNeedTab: 用于区分是否需要激活对应DRR - 在轨道拖拽操作中不必激活
       // mousedown轨道块
