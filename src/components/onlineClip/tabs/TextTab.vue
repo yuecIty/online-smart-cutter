@@ -437,17 +437,6 @@ export default {
     }
   },
   created () {
-    // 关闭接口
-    // this.isTextLoading = true
-    // 获取字幕列表
-    // this.$service.getTextList().then(data => {
-    //   this.textList = data.data
-    //   this.isTextLoading = false
-    // })
-    // // 获取字体列表
-    // this.$service.getFontFileList().then(data => {
-    //   this.fontFileList = data.data
-    // })
     this.$nextTick(() => {
       if (this.activeName === 'text') {
         // 若当前激活drr为字幕 则需对应显示操作标签页及对应数据

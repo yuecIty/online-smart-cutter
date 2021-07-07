@@ -248,8 +248,6 @@ export default {
       loadingImage: require('@/assets/material1004.png'),
       isShowCard: false,
       uploadAction: '',
-      // 关闭接口
-      // uploadAction: 'api/uploadHomeImgV2.html'
     }
   },
   computed: {
@@ -331,63 +329,6 @@ export default {
     },
     handleSecondCategorySearch () {},
     handlePictureSearch () {},
-    // 关闭接口
-    // handleSecondCategorySearch (first) {
-    //   // 检索二级目录
-    //   this.secondCategory = {}
-    //   this.pictureList = []
-    //   this.isEmpty = false
-    //   this.pagination.currentPage = 1
-    //   this.firstCategory = first
-    //   const params = {
-    //     pCategoryId: first.categoryId,
-    //     page: 1,
-    //     rows: this.pagination.pageSize
-    //   }
-    //   this.handlePictureSearch(first)
-    //   if (first.categoryId === 0) {
-    //     // 选择的一级目录为全部 则不需要检索二级目录
-    //     this.secondCategoryList = []
-    //     return true
-    //   }
-    //   this.$service.getPictureCategory(params).then(data => {
-    //     this.secondCategoryList = [{ id: 0, categoryId: this.firstCategory.categoryId, categoryName: '全部' }].concat(data.rows)
-    //   })
-    // },
-    // handlePictureSearch (second) {
-    //   // 检索贴图列表
-    //   this.isPictureLoading = true
-    //   this.isEmpty = false
-    //   this.pagination.currentPage = 1
-    //   this.picShowAmount = 80
-    //   if (document.querySelector('.picture-list')) {
-    //     document.querySelector('.picture-list').scrollTop = 0
-    //   }
-    //   this.secondCategory = second
-    //   let params = {
-    //     categoryId: second.categoryId,
-    //     page: 1,
-    //     rows: this.pagination.pageSize
-    //   }
-    //   this.$service.getPictureList(params).then(data => {
-    //     if (data.total === 0) {
-    //       // 若无数据 更新对应状态
-    //       this.isEmpty = true
-    //     }
-    //     if (data.total < params.rows) {
-    //       // 若数据量比请求的少 则已获取全部
-    //       this.pictureList = data.rows
-    //       this.isPictureLoading = false
-    //     } else {
-    //       // 若数据量比请求的多 则还需获取全部数据
-    //       params.rows = data.total
-    //       this.$service.getPictureList(params).then(dataAll => {
-    //         this.pictureList = dataAll.rows
-    //         this.isPictureLoading = false
-    //       })
-    //     }
-    //   })
-    // },
     handlePictureMore () {
       // 滚动条触底 自动增加显示
       if (this.picShowAmount < this.pictureList.length) {
@@ -544,17 +485,6 @@ export default {
       }
     },
     fetchData () {
-      // 关闭接口
-      // 获取贴图列表
-      // const params = {
-      //   pCategoryId: 0,
-      //   page: 1,
-      //   rows: this.pagination.pageSize
-      // }
-      // this.$service.getPictureCategory(params).then(data => {
-      //   this.firstCategoryList = data.rows
-      // })
-      // this.handleSecondCategorySearch({ categoryId: 0 })
     },
     initTab (val) {
       // 操作标签页需根据当前对象更新数据

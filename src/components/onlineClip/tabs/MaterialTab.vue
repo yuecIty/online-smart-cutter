@@ -99,8 +99,6 @@ export default {
       mouseTarget: null,
       loadingImage: require('@/assets/material1004.png'),
       uploadAction: '',
-      // 关闭接口
-      // uploadAction: 'api/ccVideoProduction/uploadVideo.html'
     }
   },
   computed: {
