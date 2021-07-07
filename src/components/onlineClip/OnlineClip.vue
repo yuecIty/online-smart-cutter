@@ -18,7 +18,7 @@
                 v-if="onlineTab === 'materialTab'"
                 ref="materialTab"
                 id="materialItem"
-                @update-date="updateData"
+                @update-date="updatePointerData"
                 @video-data="handleVideoDataSet"
                 @video-cover="drawCanvasVideoCover"
                 @selected-click="handleSelectedClick"
@@ -668,7 +668,7 @@ export default {
 
       if (this.materialTrackList.length === 0) {
         // 删除后 轨道为空 需清理各值
-        this.updateData(0, false)
+        this.updatePointerData(0, false)
         this.$store.commit('clearSelected')
         this.$store.commit('updatePlayingTarget', { target: 'playingMaterial', value: {}, index: undefined })
         this.videoSrc = ''
@@ -690,7 +690,7 @@ export default {
 
         // 如果删除后 指针在所有轨道块之外 则移动至最后的轨道块上
         if (this.pointerDuration > last.trackEndTime) {
-          this.updateData(last.trackEndTime, false)
+          this.updatePointerData(last.trackEndTime, false)
         }
 
         // 更新playing-
@@ -746,7 +746,7 @@ export default {
           }
           this.handleSelectedClick(e, index, target, trackIndex)
           // 更新指针数据
-          this.updateData(duration, false)
+          this.updatePointerData(duration, false)
           this.$refs.pointer.judgePlayingTarget()
           // 设置activev-drr
           this.$store.commit('updateValue', { name: 'activeName', value: active })
@@ -816,7 +816,7 @@ export default {
 
       // 设置新轨道块2的属性 并设置正确开始时间
       const newMedia = { ...media, trackStartTime: oldMedia.trackEndTime, startTime: oldMedia.endTime }
-      this.updateData(newMedia.trackStartTime, false)
+      this.updatePointerData(newMedia.trackStartTime, false)
 
       // 添加新轨道块2到轨道数据中
       this.$store.commit('updateArrayAdd', { name: 'materialTrackList', index: selected.index + 1, value: newMedia })
@@ -960,7 +960,7 @@ export default {
     changePointerStart (duration) {
       // 时间轴对指针的控制 - 点击时间轴 指针可对应跳转与拖拽
       this.handleVideoPause()
-      this.updateData(duration, false)
+      this.updatePointerData(duration, false)
       this.$refs.pointer.judgePlayingTarget()
     },
     getUlTop () {
@@ -988,7 +988,7 @@ export default {
       // 获得数组反转后原index对应的现index
       return length - 1 + index + index * (-2)
     },
-    updateData (duration, isplaying) {
+    updatePointerData (duration, isplaying) {
       // 更新指针相关数据
       let realDuration = duration
       if (duration < 0) {
@@ -1051,9 +1051,9 @@ export default {
         // 已播放至视频轨道末尾
         this.realLeft = 0
         // 最后一秒也要显示
-        this.updateData(wholeTime, true)
+        this.updatePointerData(wholeTime, true)
         // 再从头开始播放
-        this.updateData(0, true)
+        this.updatePointerData(0, true)
         video.currentTime = startTime
         setTimeout(() => {
           video.play()
@@ -1061,7 +1061,7 @@ export default {
       } else {
         // 未播放至轨道末尾
         this.realLeft = (this.pointerDuration - trackStartTime) * this.trackScale
-        this.updateData(wholeTime, true)
+        this.updatePointerData(wholeTime, true)
       }
     },
     keyUpMonitor (e) {
@@ -1133,9 +1133,11 @@ export default {
         return true
       }
       // 在操作标签页区域操作时 保留句柄 激活drr, 否则取消drr激活状态
+      const clientX = e.clientX
+      const clientY = e.clientY
       const positionRect = this.$refs.tabsCol.$el.getBoundingClientRect()
-      const inWidthRange = e.clientX > 0 && e.clientX < positionRect.width
-      const inHeightRange = e.clientY > this.titleHeight && e.clientY < positionRect.height + positionRect.top + this.titleHeight
+      const inWidthRange = clientX > 0 && clientX < positionRect.width
+      const inHeightRange = clientY > this.titleHeight && clientY < positionRect.height + positionRect.top + this.titleHeight
       if ((inWidthRange && inHeightRange) || this.isTextEdit) {
         // 获取正在操作的drr
         const targetId = drrTarget + this.selected.trackIndex

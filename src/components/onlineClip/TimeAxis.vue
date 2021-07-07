@@ -25,8 +25,9 @@ export default {
         if (vnode.context.duration === 0) {
           return false
         }
-        const distanceX = e.clientX - e.offsetX
-        vnode.context.changePointer(e.offsetX)
+        const offsetX = e.offsetX
+        const distanceX = e.clientX - offsetX
+        vnode.context.changePointer(offsetX)
         document.onmousemove = (e) => {
           // 清除浏览器默认行为
           e.preventDefault()
@@ -115,6 +116,7 @@ export default {
       }
     },
     changePointer (left) {
+      // 根据时长与显示像素的比例 计算得出duration
       let duration = left / this.trackScale
       if (duration < 0) duration = 0
       if (duration > this.materialDuration) duration = this.materialDuration

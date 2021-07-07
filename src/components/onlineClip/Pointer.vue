@@ -7,7 +7,6 @@
       <div
         class="line"
         :style="{
-          top: scrollTop + 'px',
           zIndex: isDragging ? 0 : 1
         }"
       ></div>
@@ -26,19 +25,17 @@ export default {
     widthRange: {
       type: Number,
       default: 0
-    },
-    scrollTop: {
-      type: Number,
-      default: 0
     }
   },
   directives: {
     drag: function (e, bingding, vnode) {
       let pointer = e
+      const pointerOffsetLeft = vnode.context.translateX
+      const trackScale = vnode.context.trackScale
       pointer.onmousedown = e => {
         const widthRange = vnode.context.widthRange
         // 鼠标相对元素位置
-        const distanceX = e.clientX - pointer.offsetLeft
+        const distanceX = e.clientX - pointerOffsetLeft
         document.onmousemove = e => {
           // 清除浏览器默认行为
           e.preventDefault()
@@ -56,12 +53,13 @@ export default {
           let left = e.clientX - distanceX
           if (left < 0) left = 0
           if (left > widthRange) left = widthRange - 1
-          pointer.style.left = left + 'px'
+          vnode.context.translateX = left
+          pointer.style.transform = `translate(${vnode.context.translateX}px, ${vnode.context.translateY}px)`
           // 获得playing-
           vnode.context.judgePlayingTarget()
           // 传递指针新位移
-          const pointerDuration = pointer.offsetLeft / vnode.context.trackScale
-          vnode.context.that.$emit('set-pointer-track', pointer.offsetLeft, pointerDuration)
+          const pointerDuration = pointerOffsetLeft / trackScale
+          vnode.context.that.$emit('set-pointer-track', pointerOffsetLeft, pointerDuration)
         }
         document.onmouseup = () => {
           // 清除监听 - 防止松开鼠标后仍移动
@@ -73,8 +71,8 @@ export default {
           // 获得playing-
           vnode.context.judgePlayingTarget()
           // 传递指针新位移
-          const pointerDuration = pointer.offsetLeft / vnode.context.trackScale
-          vnode.context.that.$emit('set-pointer-track', pointer.offsetLeft, pointerDuration)
+          const pointerDuration = pointerOffsetLeft / trackScale
+          vnode.context.that.$emit('set-pointer-track', pointerOffsetLeft, pointerDuration)
         }
       }
     }
@@ -102,7 +100,8 @@ export default {
           list: 'transitionList'
         }
       ],
-      xLeft: 0
+      translateY: 11, // transform-translateY
+      translateX: 0 // transform-translateX
     }
   },
   computed: {
@@ -135,12 +134,14 @@ export default {
   methods: {
     handlePointerYStatic (top) {
       // 指针随滚动条滚动移动 保持相对静止
-      this.pointer.style.top = top + 11 + 'px'
+      this.translateY = top + 11
+      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
     },
     moveWhenVideoPlay (duration) {
       // 通过duration 更新指针位移
       const left = duration * this.trackScale
-      this.pointer.style.left = left + 'px'
+      this.translateX = left
+      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
     },
     judgePlayingTarget () {
       // 获取所有的playing-
@@ -150,6 +151,7 @@ export default {
     },
     judgePlaying (track) {
       // 获取playing-
+      const offsetLeft = this.pointer.offsetLeft
       const list = track.list
       const name = track.name
       if (list === 'transitionList') {
@@ -164,7 +166,7 @@ export default {
       if (list === 'materialTrackList' || list === 'transitionList') {
         // 兼容未多轨道化的视频轨道
         index = this[list].findIndex(item => {
-          const pointerDuration = this.pointer.offsetLeft / this.trackScale
+          const pointerDuration = offsetLeft / this.trackScale
           return item.trackStartTime <= pointerDuration && item.trackEndTime > pointerDuration
         })
         const target = index === -1 ? undefined : this[list][index]
@@ -177,7 +179,7 @@ export default {
       let tempIndexIndex = []
       for (let i = 0; i < length; i++) {
         index = this[list][i].findIndex(item => {
-          const pointerDuration = this.pointer.offsetLeft / this.trackScale
+          const pointerDuration = offsetLeft / this.trackScale
           return item.trackStartTime <= pointerDuration && item.trackEndTime > pointerDuration
         })
         const target = index === -1 ? undefined : this[list][i][index]
@@ -191,7 +193,8 @@ export default {
       if (left < 1) left = 1
       if (left > this.widthRange) left = this.widthRange
       // 减去指针宽度
-      this.pointer.style.left = left - 1 + 'px'
+      this.translateX = left - 1
+      this.pointer.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`
     }
   },
   mounted () {
@@ -203,18 +206,18 @@ export default {
 pointer-width = 12px
 .pointer
   position absolute
-  top 11px
+  transform translateY(11px)
+  z-index 3
 .head
   position absolute
-  top -5px
-  left -9px
+  left -8px
   z-index 3
 .icon-biaoqian3
-  font-size 20px
+  font-size 19px
   color #BBC4BE
 .line
   position absolute
-  top 14px
+  top 4px
   left 1px
   width 0px
   height 220px
