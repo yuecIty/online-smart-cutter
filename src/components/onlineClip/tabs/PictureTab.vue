@@ -65,7 +65,7 @@
             fit="contain"
             lazy
             :src="item.picUrl"
-            :draggable="materialTrackList.length !== 0 && !!item.duration"
+            :draggable="!!item.duration"
             @dragstart="handlePictureStart({
               e: $event,
               item: item,
@@ -258,7 +258,6 @@ export default {
       selectedTarget: state => state.selectedTarget,
       playingPicture: state => state.playingPicture,
       playingPictureIndex: state => state.playingPictureIndex,
-      materialTrackList: state => state.materialTrackList,
       pictureTrackList: state => state.pictureTrackList
     })
   },
@@ -355,7 +354,7 @@ export default {
     },
     handlePictureIconAdd (picture) {
       // 添加贴图方式 - 点击列表图标
-      if (this.materialTrackList.length === 0 || !picture.duration) {
+      if (!picture.duration) {
         return false
       }
       this.$emit('icon-add', 'picture', picture)
@@ -451,13 +450,6 @@ export default {
     },
     judgePictureDraggable (picture) {
       // 判断当前贴图是否可拖拽添加
-      if (this.materialTrackList.length === 0) {
-        this.$message({
-          type: 'warning',
-          message: '视频轨道为空，请添加视频素材后再试'
-        })
-        return false
-      }
       if (!picture.duration) {
         this.$message('贴图加载中，右侧预览加载完毕后方可添加')
         return false

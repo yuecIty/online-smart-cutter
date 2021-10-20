@@ -118,20 +118,20 @@ export default {
           targetStyle.transform = this.playingPicture[this.trackIndex].transform ? this.playingPicture[this.trackIndex].transform : ''
         })
       }
+    },
+    submitPlayingIndex: function (val) {
+      if (val !== -1 && this.isSubmit) {
+        this.$nextTick(() => {
+          const realTarget = this.$refs.drrTarget ? this.$refs.drrTarget[0] : null
+          if (!realTarget) {
+            return false
+          }
+          const targetStyle = realTarget.$el ? realTarget.$el.style : realTarget.style
+          targetStyle.opacity = this.submitPlaying[this.trackIndex].transparency
+          targetStyle.transform = this.submitPlaying[this.trackIndex].transform ? this.submitPlaying[this.trackIndex].transform : ''
+        })
+      }
     }
-    // submitPlayingIndex: function (val) {
-    //   if (val !== -1 && this.isSubmit) {
-    //     this.$nextTick(() => {
-    //       const realTarget = this.$refs.drrTarget ? this.$refs.drrTarget[0] : null
-    //       if (!realTarget) {
-    //         return false
-    //       }
-    //       const targetStyle = realTarget.$el ? realTarget.$el.style : realTarget.style
-    //       targetStyle.opacity = this.submitPlaying[this.trackIndex].transparency
-    //       targetStyle.transform = this.submitPlaying[this.trackIndex].transform ? this.submitPlaying[this.trackIndex].transform : ''
-    //     })
-    //   }
-    // }
   },
   methods: {
     handleShow (index) {

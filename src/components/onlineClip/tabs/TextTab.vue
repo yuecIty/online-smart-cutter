@@ -41,7 +41,6 @@
           class="picture-style"
           @mouseenter="mouseTarget = index"
           @mouseleave="mouseTarget = null"
-          @mousedown="judgePictureDraggable()"
         >
           <i
             v-show="mouseTarget === index"
@@ -52,7 +51,7 @@
           <!-- 列表内样式应根据设置样式显示 -->
           <div
             class="text-list"
-            :draggable="materialTrackList.length !== 0"
+            :draggable="true"
             :style="{
               fontFamily: item.fontFile,
               fontSize: item.fontSize / 4 < 14 ? '14px' : item.fontSize / 4 + 'px',
@@ -308,7 +307,6 @@ export default {
       activeName: state => state.activeName,
       selected: state => state.selected,
       selectedTarget: state => state.selectedTarget,
-      materialTrackList: state => state.materialTrackList,
       textTrackList: state => state.textTrackList
     })
   },
@@ -354,22 +352,8 @@ export default {
     handleSecondCategorySearch () {},
     handlePictureSearch () {},
     handlePictureMore () {},
-    judgePictureDraggable () {
-      // 判断当前字幕是否可以拖拽添加
-      if (this.materialTrackList.length === 0) {
-        this.$message({
-          type: 'warning',
-          message: '视频轨道为空，请添加视频素材后再试'
-        })
-        return false
-      }
-      return true
-    },
     handleTextIconAdd (text) {
       // 添加字幕方式 - 点击列表图标
-      if (this.materialTrackList.length === 0) {
-        return false
-      }
       this.$emit('icon-add', 'text', text)
     },
     handleFontFamilyChange (font) {

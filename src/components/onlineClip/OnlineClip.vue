@@ -389,7 +389,7 @@ export default {
       trackScale: state => state.trackScale,
       defaultMaterialHeight: state => state.defaultMaterialHeight,
       materialTrackWidth: state => state.materialTrackWidth,
-      trackDuration: state => state.trackDuration,
+      trackDuration: state => state.timeAxisDuration, // 取所有轨道之中的时长最大值作为视频长度
       timeAxisDuration: state => state.timeAxisDuration,
       pointerLeft: state => state.pointerLeft,
       pointerDuration: state => state.pointerDuration,
@@ -693,6 +693,8 @@ export default {
       }
       // 更新轨道长度
       this.$store.commit('updateValue', { name: 'materialTrackWidth', value: this.materialTrackWidth - width })
+      // 更新trackTime
+      this.$store.commit('getTracksDration', 'materialTrackList')
       // 更新转场
       // this.$store.commit('updateValue', { name: 'operationName', value: 'delete' })
       // this.$store.commit('updateValue', { name: 'operationIndex', value: index })

@@ -1,6 +1,6 @@
 const mutations = {
+  // 获取同类型轨道中的最大时长
   getTracksDration(state, trackList) {
-    // 获取同类型轨道中的最大时长
     let duration = 0
     for (let i = 0; i < state[trackList].length; i++) {
       const list = state[trackList][i]
@@ -12,9 +12,11 @@ const mutations = {
     const name = trackList.slice(0, trackList.indexOf('Track'))
     this.commit('updateTracksDuration', { name: name, duration: duration })
   },
+  // 更新变量值
   updateValue(state, params) {
     state[params.name] = params.value
   },
+  // 更新数组内变量
   updateArrayAdd(state, params) {
     if (!isNaN(params.index)) {
       // 指定index添加
@@ -23,23 +25,28 @@ const mutations = {
       state[params.name].push(params.value)
     }
   },
+  // 更新数组内对象变量
   updateArrayObjectAdd(state, params) {
     state[params.name] = { ...params.value }
   },
+  // 数组整体重赋值
   updateArrayRevalue(state, params) {
     state[params.name] = JSON.parse(JSON.stringify(params.value))
   },
+  // 删除数组值
   updateArrayDelete(state, params) {
     state[params.name].splice(params.index, params.amount)
   },
+  // 更新数组内对象变量属性
   updateArrayObjectAttr(state, params) {
     state[params.name][params.index][params.attr] = params.value
   },
+  // 更新数组对象变量属性
   updateObjectAttribute(state, params) {
     state[params.name][params.attr] = params.value
   },
+  // 获取各类型轨道的最长时长及最大轨道时长
   updateTracksDuration(state, params) {
-    // 设置各类型轨道的最长时长 并获得最大轨道时长
     state.tracksTime[params.name] = params.duration
     let duration = 0
     for (let item in state.tracksTime) {
@@ -49,10 +56,12 @@ const mutations = {
     }
     state.timeAxisDuration = duration
   },
+  // 更新指针数据
   updatePointer(state, params) {
     state.pointerLeft = params.pointerLeft
     state.pointerDuration = params.pointerDuration
   },
+  // 更新playing- playingMaterial playingPictureIndex playingTextIndex
   updatePlayingTarget(state, params) {
     if (params.index === undefined) {
       // 兼容未多轨道化的轨道数组
@@ -62,6 +71,7 @@ const mutations = {
       state[params.target + 'Index'] = params.index
     }
   },
+  // 更新视频轨道块trackStartTime trackEndTime
   updateMateriaTime(state, params) {
     const duration = params.duration
     const index = params.index
@@ -71,6 +81,7 @@ const mutations = {
     state.materialTrackList[index].trackStartTime = (trackStartTime + duration * one).toFixed(1) * 1
     state.materialTrackList[index].trackEndTime = (trackEndTime + duration * one).toFixed(1) * 1
   },
+  // 更新转场的时间数据
   updateTransitionDuration(state, duration) {
     let target = state.operatingTransition
     target.zoomTime = duration
@@ -78,6 +89,7 @@ const mutations = {
     target.trackStartTime = Math.floor(target.originStartTime - duration / 2)
     target.trackEndTime = Math.floor(target.trackStartTime + duration)
   },
+  // 更新转场类型
   updateTransitionType(state, type) {
     let target = state.operatingTransition
     target.transitionName = type.transitionName
@@ -85,6 +97,7 @@ const mutations = {
     target.videoDuration = type.duration
     target.playbackRate = (target.videoDuration / target.zoomTime).toFixed(1) * 1
   },
+  // 更新DRR的显示分辨率
   updateDrrResolution(state, params) {
     state.proportion = params.width / state.originalWidth
     state.tracks.forEach(item => {
@@ -114,9 +127,11 @@ const mutations = {
       }
     })
   },
+  // 初始化宽度比例
   initProportion(state, width) {
     state.originalWidth = width
   },
+  // 初始化转场数组
   initTransitionList(state) {
     state.materialTrackList.forEach((item, index, arr) => {
       // 获取与下一个块相连的块
@@ -125,17 +140,20 @@ const mutations = {
       }
     })
   },
+  // 更新选择块伸缩状态
   isTrackResizeInvert(state) {
-    // 选择块是否伸缩中
     state.isTrackResize = !state.isTrackResize
   },
+  // 更新指针是否需要判断playing
   isNeedPointerJudging(state) {
     state.needPointerJudge.isNeed = false
     state.needPointerJudge.target = null
   },
+  // 初始化拖拽替换图片
   initDragImage(state) {
     state.dragImage.src = 'data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg=='
   },
+  // 初始化轨道Container
   initTrackListContainer(state, params) {
     for (let i = 0; i < params.list.length; i++) {
       state.list = params.list[i]
@@ -150,6 +168,7 @@ const mutations = {
     }
     this.dispatch('setAllTrackDraw', params)
   },
+  // 初始化轨道数组
   initTrackList(state, params) {
     // 暂时兼容接口未通
     if (!params.data) {
@@ -212,17 +231,19 @@ const mutations = {
       state[state.list].push(realList[i])
     }
   },
+  // 清空选择块数据
   clearSelected(state) {
-    // 清空选择块数据
     for (let item in state.selected) {
       state.selected[item] = null
     }
     state.selectedTarget = {}
   },
+  // 清除playing-
   clearPlaying(state, params) {
     state[params.target][params.trackIndex] = undefined
     state[params.target + 'Index'][params.trackIndex] = -1
   },
+  // 清除所有值
   clearAll(state) {
     state.materialTabList = []
     state.materialTrackList = []
@@ -237,9 +258,11 @@ const mutations = {
     state.tracksTime.text = 0
     this.commit('clearSelected')
   },
+  // 清除Drag trackId
   clearDragData(state) {
     state.trackId = null
   },
+  // 更新选择块数据
   trackBlockSelect(state, params) {
     // 消除原选择块的boxShadow
     if (state.selected.target) {
@@ -258,6 +281,7 @@ const mutations = {
     const realObject = params.realList ? params.realList[params.index] : state[params.list][params.trackIndex][params.index]
     state.selectedTarget = realObject
   },
+  // 选择块伸缩判断
   trackBlockResize(state, params) {
     state.list = params.list
     state.vm = params.vm
@@ -292,6 +316,7 @@ const mutations = {
       this.commit('trackBlockResizeMove', changeWidth)
     }
   },
+  // 处理选择快伸缩
   trackBlockResizeMove(state, changeWidth) {
     // 轨道块伸长 所在间隔不够时 后移
     let list = state[state.list][state.selected.trackIndex]
@@ -302,6 +327,7 @@ const mutations = {
     state.isTrackResize = true
     this.commit('trackDraw')
   },
+  // 处理选择块删除
   trackBlockDelete(state, params) {
     state.vm = params.vm
     state.list = state.selected.type
@@ -316,9 +342,12 @@ const mutations = {
     }
     // 删除所选轨道块
     list.splice(index, 1)
+    // 重设轨道块seq
     list.forEach((item, index) => {
       item.seq = index + 1
     })
+    // 更新trackTime
+    this.commit('getTracksDration', state.list)
     if (!list.length) {
       // 当前轨道删减后为空 清除选中及各种状态
       this.commit('clearSelected')
@@ -327,6 +356,7 @@ const mutations = {
     // 当前轨道还有块时 选中定位到旁边块
     this.dispatch('setNextTrackBlock')
   },
+  // 开始拖拽
   dragStart(state, params) {
     const e = params.e
     const item = params.item
@@ -409,6 +439,7 @@ const mutations = {
     // 添加元素到DOM
     document.body.appendChild(state.mouseElement)
   },
+  // tab-拖拽中
   tabDragging(state, e) {
     e.preventDefault()
     // 获取拖拽移动方向及当前鼠标位置
@@ -420,6 +451,7 @@ const mutations = {
       state.mouseElement.style.transform = 'translate(' + clientX + 'px,' + e.clientY + 'px)'
     }
   },
+  // track-拖拽中
   trackDragging(state, e) {
     // 获取拖拽移动方向及当前鼠标位置
     const clientX = e.clientX
@@ -428,6 +460,7 @@ const mutations = {
     // 隐藏轨道上的拖拽目标
     state.originalElement.style.visibility = 'hidden'
   },
+  // 拖拽块进入轨道区域
   dragTrackEnter(state, e) {
     // 须在对应轨道类型操作
     if (e.target.className !== state.trackId) {
@@ -440,8 +473,10 @@ const mutations = {
     let target = state.mouseElement
     target.style.boxShadow = 'inset 0px 0px 2px 1px #26CB51'
   },
+  // 拖拽块在轨道区域移动判断
   dragTrackOver(state, params) {
     // 须在对应轨道操作
+    console.log(params.e.target.className, state.trackId)
     if (params.e.target.className !== state.trackId) {
       return false
     }
@@ -451,6 +486,7 @@ const mutations = {
     state.isDropZone = true
     this.commit('draggingMove')
   },
+  // 拖拽块在轨道移动的处理
   draggingMove(state) {
     const track = document.getElementById(state.trackId + state.targetTrackIndex)
     const trackPosition = track.getBoundingClientRect()
@@ -558,6 +594,7 @@ const mutations = {
       element.style.transform = 'translate(' + dragTranslateX + 'px,' + state.picturePosition.y + 'px)'
     }
   },
+  // 放置拖拽块
   drop(state, e) {
     e.preventDefault()
 
@@ -599,6 +636,7 @@ const mutations = {
       this.commit('tabDragAdd', { target: target, index: undefined })
     }
   },
+  // tab-拖拽块添加判断与预处理
   tabDragAdd(state, params) {
     if (params.iconAdd) {
       state.trackIndex = null
@@ -635,6 +673,7 @@ const mutations = {
       })
     }
   },
+  // tab-拖拽块添加
   tabDragRealAdd(state, parmas) {
     state.tempDragTarget.height = state.tempDragTarget.width / parmas.wnh.width * parmas.wnh.height
     state.tempDragTarget.zoom = state.tempDragTarget.width + ':' + state.tempDragTarget.height
@@ -651,6 +690,7 @@ const mutations = {
       })
     }
   },
+  // 轨道块排序
   listSort(state) {
     // 按照在轨时间先后进行排序
     state[state.list][state.targetTrackIndex].sort((item, nextItem) => {
@@ -658,6 +698,7 @@ const mutations = {
     })
     this.commit('getList')
   },
+  // 轨道块format及绘制请求
   getList(state) {
     if (state.trackIndex !== null && state.targetTrackIndex !== state.trackIndex) {
       this.commit('formatList', state.targetTrackIndex)
@@ -670,6 +711,7 @@ const mutations = {
       this.dispatch('setTrackDraw', { way: false, clear: true })
     }
   },
+  // 轨道块format
   formatList(state, listIndex) {
     // 更新轨道数据
     const scale = state.trackScale

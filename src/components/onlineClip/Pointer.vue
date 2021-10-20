@@ -151,7 +151,7 @@ export default {
     },
     judgePlaying (track) {
       // 获取playing-
-      const offsetLeft = this.pointer.offsetLeft
+      const offsetLeft = this.translateX
       const list = track.list
       const name = track.name
       if (list === 'transitionList') {

@@ -16,7 +16,7 @@ const state = {
   targetTrackIndex: null, // 当前操作对应的轨道index
   playingName: null, // 当前操作对应的playing-
   // 重要公用数据
-  tracksTime: {
+  tracksTime: { // 各轨道时长
     material: 0,
     picture: 0,
     text: 0
