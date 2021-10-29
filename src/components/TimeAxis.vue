@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import { formatDuration } from '@/components/onlineClip/global/functions'
+import { formatDuration } from '@/components/global/functions'
 import { mapState } from 'vuex'
 export default {
   props: {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import OnlineClip from '@/components/onlineClip/OnlineClip.vue'
+import OnlineClip from '@/components/OnlineClip.vue'
 
 export default {
   name: 'App',

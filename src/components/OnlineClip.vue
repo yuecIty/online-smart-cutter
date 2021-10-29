@@ -298,7 +298,7 @@ import TextTrack from './tracks/TextTrack'
 import TransitionTrack from './tracks/TransitionTrack'
 import PictureDrr from './drrContainers/PictureDrr'
 import TextDrr from './drrContainers/TextDrr'
-import { formatDuration } from '@/components/onlineClip/global/functions'
+import { formatDuration } from '@/components/global/functions'
 import { mapState } from 'vuex'
 import steps from './guide'
 export default {
@@ -347,8 +347,8 @@ export default {
       },
       videoPlay: false,
       controlsIcons: {
-        play: require('../../assets/play.png'),
-        pause: require('../../assets/pause.png')
+        play: require('../assets/play.png'),
+        pause: require('../assets/pause.png')
       },
       banClip: false,
       isLimit: false,

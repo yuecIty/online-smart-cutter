@@ -199,7 +199,7 @@
   </div>
 </template>
 <script>
-import { formatColor } from '@/components/onlineClip/global/functions'
+import { formatColor } from '@/components/global/functions'
 import { mapState, mapMutations } from 'vuex'
 export default {
   props: {

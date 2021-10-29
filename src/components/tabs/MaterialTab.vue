@@ -80,7 +80,7 @@
 <script>
 import Draggable from 'vuedraggable'
 import Loading from '../Loading'
-import { formatDuration } from '@/components/onlineClip/global/functions'
+import { formatDuration } from '@/components/global/functions'
 import { mapState } from 'vuex'
 export default {
   components: {

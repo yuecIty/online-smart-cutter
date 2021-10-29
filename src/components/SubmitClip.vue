@@ -96,7 +96,7 @@ import PictureDrr from './drrContainers/PictureDrr'
 import TextDrr from './drrContainers/TextDrr'
 import VideoControls from './VideoControls'
 // import Various from './global/various'
-import { formatDuration } from '@/components/onlineClip/global/functions'
+import { formatDuration } from '@/components/global/functions'
 import { mapState } from 'vuex'
 export default {
   components: {
