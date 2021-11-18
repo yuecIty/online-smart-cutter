@@ -989,6 +989,7 @@ export default {
       if (duration < 0) {
         realDuration = 0
       }
+
       const left = realDuration * this.trackScale
 
       this.trackCurrentTime = formatDuration(realDuration)
