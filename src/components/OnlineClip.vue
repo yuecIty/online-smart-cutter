@@ -990,6 +990,7 @@ export default {
         realDuration = 0
       }
       const left = realDuration * this.trackScale
+
       this.trackCurrentTime = formatDuration(realDuration)
       this.$store.commit('updatePointer', { pointerLeft: left, pointerDuration: realDuration })
       if (isplaying) {
